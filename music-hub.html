@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Портал Легенд — Хаб</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --bg-card: #1a1a1a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0a0;
+  --accent: #c41e3a;
+  --accent-glow: rgba(196, 30, 58, 0.4);
+  --border: #2a2a2a;
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: transparent;
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.8s ease, color 0.8s ease;
+  min-height: 100vh;
+}
+html {
+  background: #0a0a12;
+}
+
+.bg-flow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #0a0a12;
+}
+.bg-flow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('bg.gif') center center / cover no-repeat;
+  filter: none;
+  transform: none;
+}
+.bg-flow::after {
+  display: none;
+}
+
+
+body.theme-manson { --accent: #c41e3a; --accent-glow: rgba(196,30,58,0.45); --bg-primary: #0a0a0a; }
+body.theme-noize { --accent: #e63946; --accent-glow: rgba(230,57,70,0.45); --bg-primary: #0a0a0a; }
+body.theme-pixie { --accent: #c084fc; --accent-glow: rgba(192,132,252,0.4); --bg-primary: #0a0a0f; }
+body.theme-ye { --accent: #c9a227; --accent-glow: rgba(201,162,39,0.4); --bg-primary: #0a0a0a; }
+body.theme-prodigy { --accent: #ff2d00; --accent-glow: rgba(255,45,0,0.45); --bg-primary: #0a0a0a; }
+body.theme-flom { --accent: #22c55e; --accent-glow: rgba(34,197,94,0.4); --bg-primary: #0a0c0a; }
+body.theme-pepel { --accent: #a78bfa; --accent-glow: rgba(167,139,250,0.4); --bg-primary: #0b0a10; }
+body.theme-kai { --accent: #f43f5e; --accent-glow: rgba(244,63,94,0.4); --bg-primary: #0c0a0b; }
+body.theme-cupsize { --accent: #38bdf8; --accent-glow: rgba(56,189,248,0.4); --bg-primary: #0a0b0e; }
+body.theme-travis { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.45); --bg-primary: #0a0908; }
+body.theme-slatt { --accent: #fb7185; --accent-glow: rgba(251,113,133,0.45); --bg-primary: #0c0a0b; }
+body.theme-lp { --accent: #38bdf8; --accent-glow: rgba(56,189,248,0.45); --bg-primary: #07090c; }
+body.theme-madkid { --accent: #e879f9; --accent-glow: rgba(232,121,249,0.45); --bg-primary: #0c0a0e; }
+body.theme-dora { --accent: #f472b6; --accent-glow: rgba(244,114,182,0.45); --bg-primary: #0c0a0c; }
+body.theme-kristiee { --accent: #c084fc; --accent-glow: rgba(192,132,252,0.45); --bg-primary: #0b0a10; }
+
+/* Hub */
+#hub {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3.5rem 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.55s;
+}
+#hub.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96) translateY(12px);
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+.hub-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  text-shadow: 0 0 40px var(--accent-glow);
+}
+.hub-sub {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.hub-section {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 2.5rem;
+}
+.hub-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  margin: 0 0 1.1rem 0.15rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+.hub-section-title span {
+  color: var(--accent, #e8e8e8);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--accent-glow), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  border-color: var(--accent);
+  box-shadow: 0 20px 50px var(--accent-glow);
+}
+.card:hover::before { opacity: 1; }
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+  position: relative;
+}
+.card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  position: relative;
+}
+.card .tag {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  position: relative;
+}
+
+/* Artist pages */
+.artist-page {
+  display: none;
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.artist-page.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.artist-page.leaving {
+  display: block;
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  pointer-events: none;
+}
+
+/* ===== Навбар: ссылки слева, имя + кнопка справа ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.4rem;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  gap: 1rem;
+}
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 1.4rem;
+  margin: 0 0 0 auto;
+  padding: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.25s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  white-space: nowrap;
+  transform: none;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 0.45rem 1rem 0.45rem 0.85rem;
+  cursor: pointer;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  white-space: nowrap;
+}
+.back-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+.back-btn .arrow {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+.back-btn:hover .arrow {
+  transform: translateX(-2px);
+}
+
+.hero {
+  height: 70vh;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  background: radial-gradient(ellipse at 30% 50%, var(--accent-glow) 0%, transparent 55%), var(--bg-primary);
+}
+.hero-content { z-index: 2; animation: fadeUp 1s ease-out; }
+.glitch {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  position: relative;
+  text-shadow: 0 0 40px var(--accent-glow);
+}
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin: 0.8rem 0 0.4rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.hero-years {
+  font-family: var(--font-display);
+  color: var(--accent);
+  letter-spacing: 0.25em;
+  margin-bottom: 1.5rem;
+}
+.cta-btn {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-display);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+.cta-btn:hover {
+  color: var(--bg-primary);
+  background: var(--accent);
+}
+
+.section { padding: 4.5rem 0; scroll-margin-top: 5.5rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent);
+}
+
+.bio-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem; }
+.bio-text p { margin-bottom: 1.1rem; color: var(--text-secondary); }
+.bio-text strong { color: var(--text-primary); }
+.bio-text em { color: var(--accent); font-style: normal; }
+.bio-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  text-align: center;
+  transition: var(--transition);
+}
+.stat-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--accent-glow);
+}
+.stat-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.timeline { position: relative; padding-left: 1.8rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+.timeline-item { position: relative; padding-bottom: 2.5rem; padding-left: 1.8rem; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.25rem;
+  top: 0.35rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.timeline-year {
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+}
+.timeline-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+.timeline-content p { color: var(--text-secondary); font-size: 0.95rem; }
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.3rem;
+}
+.album-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+  overflow: hidden;
+}
+.album-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 12px 35px var(--accent-glow);
+}
+
+.album-card .cover {
+  background-color: #111;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+.album-card .cover .cover-title {
+  position: relative;
+  z-index: 2;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+  text-shadow: 0 2px 10px #000, 0 0 6px #000;
+  opacity: 1;
+  text-align: center;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.album-card .cover {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  text-align: center;
+  padding: 1.2rem;
+  letter-spacing: 0.04em;
+  position: relative;
+}
+
+.album-card .cover .cover-title {
+  position: relative;
+  z-index: 2;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  text-shadow: 0 2px 8px #000, 0 0 4px #000;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.album-card:hover .cover .cover-title { opacity: 1; }
+
+.album-card .cover.has-img .cover-title { opacity: 0; }
+.album-card:hover .cover.has-img .cover-title { opacity: 1; }
+.album-card .cover {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.album-card .cover {
+  background-color: #111;
+}
+
+.album-card .cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.75) 100%);
+}
+.album-card .info { padding: 1rem; }
+.album-card .info h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+.album-card .info .year {
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.album-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.88);
+  z-index: 30000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+}
+.album-overlay.active { opacity: 1; visibility: visible; }
+.album-detail {
+  background: rgba(14, 14, 18, 0.96);
+  border: 1px solid var(--border);
+  max-width: 720px;
+  width: 100%;
+  max-height: min(85vh, 900px);
+  overflow-y: auto;
+  position: relative;
+  margin: auto;
+  transform: scale(0.94) translateY(0);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+}
+.album-overlay.active .album-detail { transform: scale(1) translateY(0); }
+.close-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 2.2rem;
+  cursor: pointer;
+  line-height: 1;
+  z-index: 10;
+}
+.close-btn:hover { color: var(--accent); }
+.album-detail-content {
+  display: block;
+  padding: 2.2rem 2.4rem 2.4rem;
+}
+.cover-placeholder {
+  display: none; /* обложки убраны */
+}
+.album-info {
+  max-width: 100%;
+}
+.album-info h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.album-year {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 0.9rem;
+}
+.album-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.yandex-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #ffcc00;
+  color: #ffcc00 !important;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: rgba(255,204,0,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.yandex-card-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: #ffcc00;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+.yandex-card-link:hover { border-bottom-color: #ffcc00; }
+
+.yandex-link:hover {
+  background: rgba(255,204,0,0.18);
+  box-shadow: 0 0 16px rgba(255,204,0,0.25);
+}
+
+.spotify-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #1DB954;
+  color: #1DB954 !important;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: rgba(29,185,84,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.spotify-link:hover {
+  background: rgba(29,185,84,0.22);
+  box-shadow: 0 0 16px rgba(29,185,84,0.3);
+}
+.spotify-card-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: #1DB954;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+.spotify-card-link:hover { border-bottom-color: #1DB954; }
+
+.stream-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.5rem;
+  justify-content: flex-start;
+  line-height: 1.2;
+}
+.stream-card-links a {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2;
+  height: auto;
+}
+.apple-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #fc3c44;
+  color: #fc3c44 !important;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: rgba(252,60,68,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.apple-link:hover {
+  background: rgba(252,60,68,0.22);
+  box-shadow: 0 0 16px rgba(252,60,68,0.28);
+}
+.apple-card-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: #fc3c44;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+.apple-card-link:hover { border-bottom-color: #fc3c44; }
+.album-meta .stream-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.album-meta .stream-row .yandex-link,
+.album-meta .stream-row .spotify-link,
+.album-meta .stream-row .apple-link {
+  margin-top: 0;
+}
+
+
+.album-meta span {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.03);
+}
+.album-info h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.2rem 0 0.55rem;
+}
+.album-info p#mansonStory,
+.album-info p#noizeStory,
+.album-info p {
+  color: var(--text-primary);
+  line-height: 1.65;
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.92;
+}
+.album-info ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.album-info ul li {
+  font-size: 0.88rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.04);
+}
+.album-info ul li::before { content: none; }
+
+.album-info h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: 0.25rem;
+}
+.album-year {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.8rem;
+}
+.album-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+.album-meta span {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.album-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  margin: 1.2rem 0 0.5rem;
+  color: var(--accent);
+}
+.album-info p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.album-info ul { list-style: none; }
+.album-info ul li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.album-info ul li::before { content: '▸ '; color: var(--accent); }
+
+.concerts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.3rem;
+}
+.concert-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+.concert-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px var(--accent-glow);
+}
+.concert-year {
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+.concert-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+}
+.concert-card p { color: var(--text-secondary); font-size: 0.92rem; }
+
+.influence-points {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.3rem;
+}
+.influence-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+.influence-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 22px var(--accent-glow);
+}
+.influence-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+  color: var(--accent);
+}
+.influence-card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+.footer {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer p { color: var(--text-secondary); font-size: 0.88rem; }
+.footer-note { margin-top: 0.4rem; font-size: 0.78rem !important; opacity: 0.65; }
+
+.rzt-footer {
+  margin-top: 3rem;
+  padding: 2.2rem 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  background: rgba(0,0,0,0.35);
+}
+.rzt-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.rzt-footer a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.03);
+}
+.rzt-icon { font-size: 1.35rem; line-height: 1; }
+.rzt-note {
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  color: var(--text-secondary);
+}
+
+.rzt-copy {
+  margin-top: 0.9rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  opacity: 0.25;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .bio-grid { grid-template-columns: 1fr; }
+  .album-detail-content { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+@media (max-width: 600px) {
+  .cards { grid-template-columns: 1fr; }
+  .concerts-grid { grid-template-columns: 1fr; }
+  .nav-logo { font-size: 1rem; transform: translateX(4px); }
+  .back-btn { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
+}
+
+/* Pixiesquad */
+.pixie-container { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.pixie-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.pixie-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(192,132,252,0.12);
+  border: 1px solid rgba(192,132,252,0.25);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+.pixie-header h1 {
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #e8e8f0 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pixie-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 1.4rem;
+}
+.pixie-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.pixie-section h2::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(to bottom, var(--accent), #f472b6);
+  border-radius: 2px;
+}
+.member { padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+.member:last-child { border-bottom: none; }
+.member-name { font-weight: 560; color: var(--text-primary); }
+.member-desc { font-size: 0.88rem; color: var(--text-secondary); }
+.pixie-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.pixie-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.pixie-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.year { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 500; }
+.type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
+/* Ye & Prodigy accordions */
+.ye-albums, .prodigy-albums { display: flex; flex-direction: column; gap: 1.4rem; }
+.ye-album, .prodigy-album {
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  transform: translateY(25px);
+}
+.ye-album.visible, .prodigy-album.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.ye-album:hover, .prodigy-album:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.5);
+}
+.album-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 1.6rem;
+  gap: 0.8rem;
+}
+.album-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+}
+.album-year { opacity: 0.85; }
+.album-toggle { font-size: 0.85rem; opacity: 0.7; margin-left: auto; }
+.album-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.35s ease;
+  padding: 0 1.6rem;
+}
+.ye-album.open .album-body,
+.prodigy-album.open .album-body {
+  max-height: 1400px;
+  padding: 0 1.6rem 1.6rem;
+}
+.tracklist {
+  background: rgba(0,0,0,0.28);
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.tracklist ol { padding-left: 1.2rem; }
+
+.dropout { background: linear-gradient(145deg, #1a1208, #2a1c0a); border: 2px solid #c9a227; --accent-local: #c9a227; }
+.late { background: linear-gradient(145deg, #0f1a12, #1a2a1c); border: 2px solid #4a7c59; --accent-local: #6b9b7a; }
+.graduation { background: linear-gradient(145deg, #0a1520, #102030); border: 2px solid #3a8fd0; --accent-local: #5ba8e0; }
+.heartbreak { background: linear-gradient(145deg, #1a0a12, #2a1020); border: 2px solid #c45c7a; --accent-local: #e07a9a; }
+.fantasy { background: linear-gradient(145deg, #1a0a0a, #2a1010); border: 2px solid #c41e3a; --accent-local: #e03050; }
+.yeezus { background: linear-gradient(145deg, #111, #1a1a1a); border: 2px solid #888; --accent-local: #bbb; }
+.pablo { background: linear-gradient(145deg, #1a1008, #2a1a10); border: 2px solid #d4a017; --accent-local: #e8b82a; }
+.ye { background: linear-gradient(145deg, #0f1a0f, #152015); border: 2px solid #5a9a5a; --accent-local: #7aba7a; }
+.jesus { background: linear-gradient(145deg, #0a0a12, #12121e); border: 2px solid #6a6a9a; --accent-local: #8a8aba; }
+.donda { background: linear-gradient(145deg, #0a0a0a, #151515); border: 2px solid #fff; --accent-local: #eee; }
+.bully { background: linear-gradient(145deg, #0d0d0d, #1a1a1a); border: 2px solid #aaa; --accent-local: #ccc; }
+.ye-album .album-title { color: var(--accent-local); }
+
+.exp { background: linear-gradient(145deg, #0c1f0c, #163016); border: 2px solid #39ff14; --accent-local: #39ff14; }
+.jilted { background: linear-gradient(145deg, #1c1c1c, #2e2e2e); border: 2px solid #b8b8b8; --accent-local: #c0c0c0; }
+.fat { background: linear-gradient(145deg, #00253d, #004466); border: 2px solid #ff4500; --accent-local: #ff4500; }
+.always { background: linear-gradient(145deg, #1f0f00, #2e1a00); border: 2px solid #ff8c00; --accent-local: #ff8c00; }
+.invaders { background: linear-gradient(145deg, #120000, #220808); border: 2px solid #e60000; --accent-local: #ff1a1a; }
+.day { background: linear-gradient(145deg, #2b0d00, #3f1800); border: 2px solid #ff6b00; --accent-local: #ff6b00; }
+.tourists { background: linear-gradient(145deg, #0a0a0a, #151515); border: 2px solid #00e6b8; --accent-local: #00e6b8; }
+.prodigy-album .album-title { color: var(--accent-local); }
+
+.concert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.3rem;
+  margin-top: 1.5rem;
+}
+.concert-card.highlight {
+  background: linear-gradient(145deg, #1a0505, #2a0a0a);
+  border-left: 5px solid var(--accent);
+  grid-column: 1 / -1;
+}
+.influence-list { list-style: none; }
+.influence-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+.influence-list li::before {
+  content: '▶';
+  color: var(--accent);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.foreign-agent {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border-radius: 2px;
+}
+.agent-disclaimer {
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  padding: 0.9rem 1.3rem;
+  margin: 1.8rem auto 0;
+  max-width: 780px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+</style>
+</head>
+<body>
+<div class="bg-flow"></div>
+<div class="cursor-glow"></div>
+
+<!-- ==================== HUB ==================== -->
+<div id="hub">
+  <h1 class="hub-title">Портал Легенд</h1>
+  <p class="hub-sub">Истории, дискографии и голоса эпохи</p>
+
+  <section class="hub-section">
+    <h2 class="hub-section-title">Русские исполнители</h2>
+    <div class="cards">
+      <div class="card" data-artist="noize" style="--accent:#e63946;--accent-glow:rgba(230,57,70,0.4)">
+        <h3>Noize MC*</h3>
+        <p>Рэп · Рок · Свобода слова</p>
+        <span class="tag">2003 — н.в.</span>
+      </div>
+      <div class="card" data-artist="pixie" style="--accent:#c084fc;--accent-glow:rgba(192,132,252,0.4)">
+        <h3>Pixiesquad</h3>
+        <p>Hyperpop · Digicore</p>
+        <span class="tag">Русский хайперпоп</span>
+      </div>
+      <div class="card" data-artist="pepel" style="--accent:#a78bfa;--accent-glow:rgba(167,139,250,0.4)">
+        <h3>Pepel Nahudi</h3>
+        <p>ASHTRAY BLOC</p>
+        <span class="tag">2018 — н.в.</span>
+      </div>
+      <div class="card" data-artist="kai" style="--accent:#f43f5e;--accent-glow:rgba(244,63,94,0.4)">
+        <h3>Kai Angel</h3>
+        <p>Viperr · God System</p>
+        <span class="tag">2018 — н.в.</span>
+      </div>
+      <div class="card" data-artist="cupsize" style="--accent:#38bdf8;--accent-glow:rgba(56,189,248,0.4)">
+        <h3>CUPSIZE</h3>
+        <p>Ярославль · гранж / инди</p>
+        <span class="tag">2020 — н.в.</span>
+      </div>
+      <div class="card" data-artist="slatt" style="--accent:#fb7185;--accent-glow:rgba(251,113,133,0.45)">
+        <h3>Slattcrank</h3>
+        <p>ASHTRAY BLOC · Урал</p>
+        <span class="tag">2021 — н.в.</span>
+      </div>
+      <div class="card" data-artist="madkid" style="--accent:#e879f9;--accent-glow:rgba(232,121,249,0.45)">
+        <h3>madk1d</h3>
+        <p>Томск · sexyswag</p>
+        <span class="tag">2020 — н.в.</span>
+      </div>
+      <div class="card" data-artist="dora" style="--accent:#f472b6;--accent-glow:rgba(244,114,182,0.45)">
+        <h3>Дора</h3>
+        <p>кьют-рок · pop</p>
+        <span class="tag">2019 — н.в.</span>
+      </div>
+      <div class="card" data-artist="kristiee" style="--accent:#c084fc;--accent-glow:rgba(192,132,252,0.45)">
+        <h3>KRISTIEE</h3>
+        <p>Москва · Hanna Mantana</p>
+        <span class="tag">2023 — н.в.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <h2 class="hub-section-title">Англоязычные исполнители</h2>
+    <div class="cards">
+      <div class="card" data-artist="manson" style="--accent:#c41e3a;--accent-glow:rgba(196,30,58,0.4)">
+        <h3>Marilyn Manson</h3>
+        <p>Шок-рок · Индустриал · Глэм</p>
+        <span class="tag">1994 — н.в.</span>
+      </div>
+      <div class="card" data-artist="ye" style="--accent:#c9a227;--accent-glow:rgba(201,162,39,0.4)">
+        <h3>Ye</h3>
+        <p>От Kanye West к Ye</p>
+        <span class="tag">2004 — н.в.</span>
+      </div>
+      <div class="card" data-artist="prodigy" style="--accent:#ff2d00;--accent-glow:rgba(255,45,0,0.4)">
+        <h3>The Prodigy</h3>
+        <p>Мы живём ритмом</p>
+        <span class="tag">1990 — н.в.</span>
+      </div>
+      <div class="card" data-artist="travis" style="--accent:#f59e0b;--accent-glow:rgba(245,158,11,0.45)">
+        <h3>Travis Scott</h3>
+        <p>Astroworld · Cactus Jack</p>
+        <span class="tag">2013 — н.в.</span>
+      </div>
+      <div class="card" data-artist="lp" style="--accent:#38bdf8;--accent-glow:rgba(56,189,248,0.45)">
+        <h3>Linkin Park</h3>
+        <p>Nu-metal · электронный рок</p>
+        <span class="tag">1996 — н.в.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <h2 class="hub-section-title">Музыкальные критики</h2>
+    <div class="cards">
+      <div class="card" data-artist="flom" style="--accent:#22c55e;--accent-glow:rgba(34,197,94,0.4)">
+        <h3>Александр Фломастер</h3>
+        <p>Основатель РЗТ</p>
+        <span class="tag">Риса За Творчество</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== MARILYN MANSON ==================== -->
+<div id="page-manson" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">MARILYN MANSON</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#m-bio">Биография</a></li>
+      <li><a href="#m-history">История</a></li>
+      <li><a href="#m-discography">Дискография</a></li>
+      <li><a href="#m-concerts">Концерты</a></li>
+      <li><a href="#m-influence">Влияние</a></li>
+    </ul>
+  </nav>
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="glitch" data-text="MARILYN MANSON">MARILYN MANSON</h1>
+      <p class="hero-subtitle">Шок-рок · Индустриал · Глэм</p>
+      <p class="hero-years">1994 — настоящее время</p>
+      <a href="#m-discography" class="cta-btn">Исследовать альбомы</a>
+    </div>
+  </header>
+  <section id="m-bio" class="section">
+    <div class="container">
+      <h2 class="section-title">Биография</h2>
+      <div class="bio-grid">
+        <div class="bio-text">
+          <p><strong>Brian Hugh Warner</strong> (род. 5 января 1969, Кантон, Огайо) — американский певец, автор песен, актёр и художник, более известный как <strong>Marilyn Manson</strong>.</p>
+          <p>Псевдоним сложился из имён Мэрилин Монро и Чарльза Мэнсона. В начале 90-х в Форт-Лодердейле создал группу, которая быстро стала символом шок-рока.</p>
+          <p>Прорыв — альбом <em>Antichrist Superstar</em> (1996). Дальше — трилогия с Mechanical Animals и Holy Wood, постоянные скандалы, протесты и культовый статус.</p>
+          <p>После перерыва и скандалов 2020-х вернулся с <em>One Assassination Under God – Chapter 1</em> (2024) и масштабным туром.</p>
+        </div>
+        <div class="bio-stats">
+          <div class="stat-card"><span class="stat-number">13</span><span class="stat-label">Студийных альбомов</span></div>
+          <div class="stat-card"><span class="stat-number">1994</span><span class="stat-label">Дебют</span></div>
+          <div class="stat-card"><span class="stat-number">7M+</span><span class="stat-label">Копий Antichrist</span></div>
+          <div class="stat-card"><span class="stat-number">∞</span><span class="stat-label">Скандалов</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="m-history" class="section">
+    <div class="container">
+      <h2 class="section-title">История</h2>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">1989–1993</div><div class="timeline-content"><h3>Формирование</h3><p>Создание Marilyn Manson & the Spooky Kids. Первые концерты во Флориде. Подписание с Nothing Records Трента Резнора.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">1994–1996</div><div class="timeline-content"><h3>Прорыв</h3><p><em>Portrait of an American Family</em> → <em>Antichrist Superstar</em>. Тур Dead to the World. Мировая сенсация и массовые протесты.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">1998–2000</div><div class="timeline-content"><h3>Трилогия</h3><p><em>Mechanical Animals</em> (№1 Billboard) и <em>Holy Wood</em>. Ответ на обвинения после Колумбайна.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2003–2015</div><div class="timeline-content"><h3>Эксперименты</h3><p>От Grotesque до Pale Emperor. Смена звука, лейблов и образов.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2024–2026</div><div class="timeline-content"><h3>Возвращение</h3><p><em>One Assassination Under God</em> и мировой тур после долгого перерыва.</p></div></div>
+      </div>
+    </div>
+  </section>
+  <section id="m-discography" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — откроется история и сменится палитра</p>
+      <div class="album-grid" id="mansonAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="mansonOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="mansonClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="cover-placeholder" id="mansonCover"></div>
+          <div class="album-info">
+            <h2 id="mansonTitle"></h2>
+            <p class="album-year" id="mansonYear"></p>
+            <div class="album-meta" id="mansonMeta"></div>
+            <h3>История записи</h3>
+            <p id="mansonStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="mansonTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="m-concerts" class="section">
+    <div class="container">
+      <h2 class="section-title">Крупнейшие туры</h2>
+      <div class="concerts-grid">
+        <div class="concert-card"><div class="concert-year">1996–1997</div><h3>Dead to the World</h3><p>Тур в поддержку Antichrist Superstar. Масштабные протесты, религиозные символы, мировой прорыв.</p></div>
+        <div class="concert-card"><div class="concert-year">2000–2001</div><h3>Guns, God and Government</h3><p>Ответ на Колумбайн. Политически заряженные шоу с Holy Wood.</p></div>
+        <div class="concert-card"><div class="concert-year">2003–2004</div><h3>Grotesk Burlesk</h3><p>Веймар, бурлеск, «дегенеративное искусство». Один из самых визуальных туров.</p></div>
+        <div class="concert-card"><div class="concert-year">2015–2019</div><h3>Hell Not Hallelujah / Heaven Upside Down</h3><p>Возвращение к большим сценам. Совместные туры с Rob Zombie.</p></div>
+        <div class="concert-card"><div class="concert-year">2024–2026</div><h3>One Assassination Under God Tour</h3><p>Более 150 концертов. Возвращение после перерыва.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="m-influence" class="section">
+    <div class="container">
+      <h2 class="section-title">Влияние на рок</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;max-width:800px">Marilyn Manson стал одним из последних настоящих шок-рокеров и ключевой фигурой индустриального и альтернативного метала 90-х.</p>
+      <div class="influence-points">
+        <div class="influence-card"><h3>Визуальный язык</h3><p>Макияж, костюмы и сценические образы повлияли на целое поколение артистов.</p></div>
+        <div class="influence-card"><h3>Концептуальные альбомы</h3><p>Трилогия Antichrist — Mechanical — Holy Wood показала, как строить большие нарративы.</p></div>
+        <div class="influence-card"><h3>Свобода выражения</h3><p>Символ борьбы за свободу художественного высказывания.</p></div>
+        <div class="influence-card"><h3>Наследие</h3><p>Влияние на In This Moment, New Years Day и многие индастриал/готик-коллективы.</p></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p>Marilyn Manson — неофициальный фан-сайт</p>
+      <p class="footer-note">Информация из открытых источников. Образовательные цели.</p>
+    </div>
+  </footer>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+<!-- ==================== NOIZE MC ==================== -->
+<div id="page-noize" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">NOIZE MC*</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#n-bio">Биография</a></li>
+      <li><a href="#n-history">История</a></li>
+      <li><a href="#n-discography">Дискография</a></li>
+      <li><a href="#n-concerts">Концерты</a></li>
+      <li><a href="#n-influence">Влияние</a></li>
+    </ul>
+  </nav>
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="glitch" data-text="NOIZE MC*">NOIZE MC*</h1>
+      <p class="hero-subtitle">Рэп. Рок. Свобода слова</p>
+      <p class="hero-years">2003 — настоящее время</p>
+      <div class="foreign-agent">* Признан иностранным агентом в РФ</div>
+      <a href="#n-discography" class="cta-btn">Исследовать альбомы</a>
+    </div>
+  </header>
+  <section id="n-bio" class="section">
+    <div class="container">
+      <h2 class="section-title">Биография</h2>
+      <div class="bio-grid">
+        <div class="bio-text">
+          <p><strong>Иван Александрович Алексеев</strong>* (род. 9 марта 1985, Ярцево) — российский рэп-рок исполнитель, более известный как <strong>Noize MC</strong>*.</p>
+          <p>Начал с музыкальной школы. В 2003 в Москве создал группу <em>Protivo Gunz</em>. Прорыв — 2006–2008: баттлы Hip-Hop.ru, Universal, роль в «Розыгрыше» и дебютный <em>The Greatest Hits Vol. 1</em>.</p>
+          <p>Остросоциальные тексты, смесь рэпа, рока и панка. После 2022 уехал из России, признан иноагентом. Продолжает выпускать музыку и гастролировать.</p>
+        </div>
+        <div class="bio-stats">
+          <div class="stat-card"><span class="stat-number">10+</span><span class="stat-label">Студийных альбомов</span></div>
+          <div class="stat-card"><span class="stat-number">2003</span><span class="stat-label">Год основания</span></div>
+          <div class="stat-card"><span class="stat-number">*</span><span class="stat-label">Иноагент с 2022</span></div>
+          <div class="stat-card"><span class="stat-number">∞</span><span class="stat-label">Концертов</span></div>
+        </div>
+      </div>
+      <div class="agent-disclaimer">* Материал произведён и распространён иностранным агентом Иваном Александровичем Алексеевым, либо касается его деятельности</div>
+    </div>
+  </section>
+  <section id="n-history" class="section">
+    <div class="container">
+      <h2 class="section-title">История</h2>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2003–2006</div><div class="timeline-content"><h3>Protivo Gunz</h3><p>Создание группы в общежитии РГГУ. Уличные концерты, баттлы, формирование стиля рэп + живые инструменты.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2007–2008</div><div class="timeline-content"><h3>Прорыв</h3><p>Universal, «Розыгрыш», <em>The Greatest Hits Vol. 1</em> — «Из окна», «Выдыхай», «Моё море».</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2010–2014</div><div class="timeline-content"><h3>Зрелость</h3><p><em>Последний альбом</em>, <em>Новый альбом</em>, <em>Hard Reboot</em> и др.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2016–2021</div><div class="timeline-content"><h3>Большие формы</h3><p><em>Царь горы</em>, хипхопера <em>Орфей & Эвридика</em>, <em>Выход в город</em>. Стадионы.</p></div></div>
+        <div class="timeline-item"><div class="timeline-year">2022–н.в.</div><div class="timeline-content"><h3>Эмиграция</h3><p>Признание иноагентом. Альбом <em>Не все дома</em> (2025), туры по Европе и США.</p></div></div>
+      </div>
+    </div>
+  </section>
+  <section id="n-discography" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — история записи и смена палитры</p>
+      <div class="album-grid" id="noizeAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="noizeOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="noizeClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="cover-placeholder" id="noizeCover"></div>
+          <div class="album-info">
+            <h2 id="noizeTitle"></h2>
+            <p class="album-year" id="noizeYear"></p>
+            <div class="album-meta" id="noizeMeta"></div>
+            <h3>История записи</h3>
+            <p id="noizeStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="noizeTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="n-concerts" class="section">
+    <div class="container">
+      <h2 class="section-title">Крупнейшие туры</h2>
+      <div class="concerts-grid">
+        <div class="concert-card"><div class="concert-year">2008–2010</div><h3>После дебюта</h3><p>Первые большие туры по России. От андеграунда к мейнстриму.</p></div>
+        <div class="concert-card"><div class="concert-year">2014–2016</div><h3>Hard Reboot / Царь горы</h3><p>Масштабные туры, хедлайнер фестивалей, переход к аренам.</p></div>
+        <div class="concert-card"><div class="concert-year">2018–2019</div><h3>Орфей & Эвридика</h3><p>Хипхопера и программы с оркестром. Пик карьеры в России.</p></div>
+        <div class="concert-card"><div class="concert-year">2021</div><h3>Выход в город</h3><p>Последние крупные концерты в России. Стадионы.</p></div>
+        <div class="concert-card"><div class="concert-year">2022–2026</div><h3>Международные туры</h3><p>Европа, США, Канада. Лондон, Берлин, Нью-Йорк, Варшава.</p></div>
+        <div class="concert-card"><div class="concert-year">2025–2026</div><h3>Не все дома</h3><p>Тур в поддержку нового альбома.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="n-influence" class="section">
+    <div class="container">
+      <h2 class="section-title">Влияние</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;max-width:800px">Noize MC* стал одним из ключевых голосов русскоязычного рэп-рока 2000–2020-х.</p>
+      <div class="influence-points">
+        <div class="influence-card"><h3>Рэп + рок</h3><p>Один из главных популяризаторов формата «рэп с живой группой».</p></div>
+        <div class="influence-card"><h3>Социальная лирика</h3><p>Тексты о свободе, неравенстве и ответственности стали эталоном.</p></div>
+        <div class="influence-card"><h3>Независимость</h3><p>Пример артиста, продолжающего творить в условиях давления и эмиграции.</p></div>
+        <div class="influence-card"><h3>Наследие</h3><p>«Из окна», «Выдыхай», «Моё море», «На Марсе классно» — часть культурного кода.</p></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p>Noize MC* — неофициальный фан-сайт</p>
+      <p class="footer-note">* Признан иностранным агентом в РФ. Образовательные цели.</p>
+    </div>
+  </footer>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+<!-- ==================== PIXIESQUAD ==================== -->
+<div id="page-pixie" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">PIXIESQUAD</div>
+    </div>
+    <ul class="nav-links"></ul>
+  </nav>
+  <div class="pixie-container">
+    <header class="pixie-header">
+      <div class="pixie-badge">Hyperpop / Digicore</div>
+      <h1>Pixiesquad</h1>
+      <p style="color:var(--text-secondary)">История образования · Вклад в русский хайперпоп · Дискография</p>
+    </header>
+    <section class="pixie-section">
+      <h2>История образования</h2>
+      <p><span style="color:var(--text-primary)">Pixiesquad</span> (пиксисквад / пикси) — творческое объединение и лейбл в русском хайперпопе.</p>
+      <p>Изначально ядро составляли <strong>Sqwore</strong> (Даня Скворцов), <strong>rizza</strong> и <strong>Jetty Gas</strong>. Познакомились через Discord.</p>
+      <p>Позже присоединились <strong>17 SEVENTEEN</strong>, <strong>kayyo</strong>, <strong>emi4ka</strong>, treepside, drowsyy, evan wheel и другие.</p>
+      <p>Это не классическая группа, а сквад/коллектив. Участники живут в разных городах, но регулярно встречаются и делают совместные треки.</p>
+    </section>
+    <section class="pixie-section">
+      <h2>Вклад в русский хайперпоп</h2>
+      <ul style="list-style:none;padding:0">
+        <li style="margin-bottom:0.8rem;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:var(--accent)">•</span><strong style="color:var(--text-primary)">Популяризация звука.</strong> Треки Sqwore × rizza сильно залетели в TikTok.</li>
+        <li style="margin-bottom:0.8rem;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:var(--accent)">•</span><strong style="color:var(--text-primary)">Узнаваемый саунд.</strong> Digicore / hyperpop / emo-pop, высокий питч, глитчи, «сказочный» pixie-вайб.</li>
+        <li style="margin-bottom:0.8rem;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:var(--accent)">•</span><strong style="color:var(--text-primary)">Лейбл / платформа.</strong> Под маркой pixiesquad выходят альбомы и сайферы.</li>
+        <li style="padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:var(--accent)">•</span><strong style="color:var(--text-primary)">Комьюнити.</strong> Атмосфера «своих» без давления индустрии.</li>
+      </ul>
+    </section>
+    <section class="pixie-section">
+      <h2>Ключевые участники</h2>
+      <div class="member"><div class="member-name">Sqwore (Даня Скворцов)</div><div class="member-desc">Главный голос сквада, Боровичи. Альбомы Eve, 432hz, Eve 2.</div></div>
+      <div class="member"><div class="member-name">17 SEVENTEEN (Никита)</div><div class="member-desc">Чита → Москва. «Песочный человек», «Мы Смеялись Никто Не Понял».</div></div>
+      <div class="member"><div class="member-name">kayyo</div><div class="member-desc">Продюсер, битмейкер. Один из главных саунд-архитекторов.</div></div>
+      <div class="member"><div class="member-name">Jetty Gas</div><div class="member-desc">Продюсер из Севастополя. Один из основателей.</div></div>
+      <div class="member"><div class="member-name">rizza</div><div class="member-desc">Ранний участник. Коллабы с Sqwore стали хитами.</div></div>
+      <div class="member"><div class="member-name">emi4ka · treepside · drowsyy · evan wheel</div><div class="member-desc">Частые коллабораторы и участники сайферов.</div></div>
+    </section>
+    <section class="pixie-section">
+      <h2>Основные релизы</h2>
+      <table class="pixie-table">
+        <thead><tr><th>Год</th><th>Артист</th><th>Релиз</th><th>Тип</th></tr></thead>
+        <tbody>
+          <tr><td class="year">2021</td><td>Sqwore</td><td>Eve</td><td><span class="type">LP</span></td></tr>
+          <tr><td class="year">2021</td><td>17 SEVENTEEN</td><td>Две тысячи семнадцатый</td><td><span class="type">EP</span></td></tr>
+          <tr><td class="year">2022</td><td>Sqwore</td><td>432hz</td><td><span class="type">LP</span></td></tr>
+          <tr><td class="year">2022</td><td>17 SEVENTEEN</td><td>Песочный Человек</td><td><span class="type">LP</span></td></tr>
+          <tr><td class="year">2022</td><td>pixiesquad</td><td>pixie new year</td><td><span class="type">Single</span></td></tr>
+          <tr><td class="year">2023</td><td>Sqwore & 17 SEVENTEEN</td><td>Как я провела лето</td><td><span class="type">EP</span></td></tr>
+          <tr><td class="year">2024</td><td>Sqwore</td><td>Eve 2</td><td><span class="type">LP</span></td></tr>
+          <tr><td class="year">2024</td><td>17 SEVENTEEN</td><td>Мы Смеялись Никто Не Понял</td><td><span class="type">LP</span></td></tr>
+          <tr><td class="year">2024</td><td>17 SEVENTEEN</td><td>Кошмар перед Рождеством</td><td><span class="type">EP</span></td></tr>
+          <tr><td class="year">2024</td><td>pixiesquad</td><td>spooky pooky blog</td><td><span class="type">Single</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--text-secondary);font-style:italic">Под лейблом pixiesquad выходит гораздо больше синглов и коллабов.</p>
+    </section>
+    <section class="pixie-section">
+      <h2>Краткий итог</h2>
+      <p>Pixiesquad — одно из самых цельных и влиятельных сообществ русского интернет-звука начала 2020-х. Они сделали хайперпоп не только вирусным, но и очень личным и «своим».</p>
+    </section>
+  </div>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+<!-- ==================== YE ==================== -->
+<div id="page-ye" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">YE</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#y-bio">Биография</a></li>
+      <li><a href="#y-albums">Дискография</a></li>
+      <li><a href="#y-concerts">Концерты</a></li>
+      <li><a href="#y-influence">Влияние</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="background:linear-gradient(135deg,#0d0d0d 0%,#1a1200 50%,#000 100%)">
+    <div class="hero-content">
+      <h1 style="font-family:var(--font-display);font-size:clamp(3.5rem,11vw,8rem);letter-spacing:10px;text-shadow:0 0 50px rgba(201,162,39,0.5)">YE</h1>
+      <p style="font-size:1.2rem;opacity:0.85;max-width:600px">От Kanye West к Ye.<br>История одного из самых влиятельных и противоречивых артистов XXI века.</p>
+    </div>
+  </header>
+  <section id="y-bio" class="section">
+    <div class="container">
+      <h2 class="section-title">Биография</h2>
+      <p style="margin-bottom:1.1rem">Kanye Omari West родился 8 июня 1977 в Атланте, вырос в Чикаго. Начал как продюсер (Jay-Z, The Blueprint и др.). В 2004 выпустил <em>The College Dropout</em> и мгновенно стал одним из главных голосов хип-хопа.</p>
+      <p style="margin-bottom:1.1rem">Далее — Late Registration, Graduation, 808s & Heartbreak, My Beautiful Dark Twisted Fantasy, Yeezus, The Life of Pablo, ye, Jesus Is King, Donda и в 2026 — <em>Bully</em>.</p>
+      <div style="border-left:4px solid var(--accent);padding:1rem 1.4rem;margin:1.8rem 0;background:rgba(201,162,39,0.08);font-style:italic">
+        «Я верю, что “ye” — самое частое слово в Библии. В Библии оно означает “ты”. Так что я — ты, я — мы…»
+      </div>
+      <p>В 2018 объявил, что теперь его зовут Ye. В октябре 2021 суд официально утвердил смену имени. Параллельно строил Yeezy, Sunday Service и постоянно менял правила игры.</p>
+    </div>
+  </section>
+  <section id="y-albums" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="margin-bottom:1.5rem;opacity:0.8">Нажми на альбом — откроется трек-лист и история</p>
+      <div class="ye-albums" id="yeAlbums"></div>
+    </div>
+  </section>
+  <section id="y-concerts" class="section">
+    <div class="container">
+      <h2 class="section-title">Крупнейшие концерты и туры</h2>
+      <div class="concert-grid">
+        <div class="concert-card highlight"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Saint Pablo Tour (2016)</h4><p>Парящая платформа над толпой. Минимализм и чистый фокус на музыке.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Yeezus Tour (2013–2014)</h4><p>Гора, маски, апокалиптические образы. Открывающие — Kendrick, Pusha T, Travis.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Coachella 2011</h4><p>Один из сильнейших фестивальных сетов. Светящаяся платформа, балет.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Glow in the Dark (2008)</h4><p>Первый большой концептуальный тур. Сюжет про разбившийся космический корабль.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Glastonbury 2015</h4><p>Хедлайнер главной сцены. Огромная петиция против — и легендарное шоу.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Donda Listening (2021)</h4><p>Стадионные прослушивания в Атланте и Чикаго. Хор, гости.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="y-influence" class="section">
+    <div class="container">
+      <h2 class="section-title">Вклад в индустрию</h2>
+      <ul class="influence-list">
+        <li><strong>Продюсерский прорыв</strong> — soul-сэмплы и чипмунк-стиль изменили хип-хоп начала 2000-х.</li>
+        <li><strong>Расширение границ</strong> — каждый альбом менял правила: от College Dropout до Yeezus и Jesus Is King.</li>
+        <li><strong>808s & Heartbreak</strong> — сделал Auto-Tune и эмоциональную уязвимость нормой (влияние на Drake, Weeknd, Future).</li>
+        <li><strong>Максимализм и минимализм</strong> — MBDTF vs Yeezus.</li>
+        <li><strong>Формат релиза</strong> — «живой» Pablo, стадионные listening parties Donda.</li>
+        <li><strong>Визуал и сцена</strong> — Мураками, Кондо, парящая сцена Saint Pablo.</li>
+        <li><strong>Независимость</strong> — Yeezy и попытки выйти из-под контроля корпораций.</li>
+      </ul>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p>Сайт создан по открытым источникам. Имя артиста — Ye (с октября 2021).</p>
+    </div>
+  </footer>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+<!-- ==================== THE PRODIGY ==================== -->
+<div id="page-prodigy" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">THE PRODIGY</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#p-bio">Биография</a></li>
+      <li><a href="#p-albums">Дискография</a></li>
+      <li><a href="#p-concerts">Концерты</a></li>
+      <li><a href="#p-influence">Влияние</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="background:linear-gradient(135deg,#111 0%,#1a0000 50%,#000 100%)">
+    <div class="hero-content">
+      <h1 style="font-family:var(--font-display);font-size:clamp(2.8rem,9vw,6rem);letter-spacing:6px;text-shadow:0 0 40px rgba(255,45,0,0.6)">THE PRODIGY</h1>
+      <p style="font-size:1.2rem;opacity:0.85;max-width:650px">Мы живём ритмом.<br>История группы, которая превратила рэйв в электронный панк и покорила мир.</p>
+    </div>
+  </header>
+  <section id="p-bio" class="section">
+    <div class="container">
+      <h2 class="section-title">Биография</h2>
+      <p style="margin-bottom:1.1rem">The Prodigy родились в октябре 1990 в Брейнтри, Эссекс. Лиам Хоулетт собрал Кита Флинта, Лироя Торнхилла и MC Максима. Название — от синтезатора Moog Prodigy.</p>
+      <p style="margin-bottom:1.1rem">Ранние годы — чистый британский рэйв: «Charly», «Everybody in the Place». Дебютный <em>Experience</em> (1992). После <em>Music for the Jilted Generation</em> звук стал тяжелее. Пик — <em>The Fat of the Land</em> (1997): №1 в 16 странах.</p>
+      <div style="border-left:4px solid var(--accent);padding:1rem 1.4rem;margin:1.8rem 0;background:rgba(255,45,0,0.08);font-style:italic">
+        «Из подпольных лондонских клубов на 200 человек она выбралась на крупнейшие мировые стадионы…» — Мартин Джеймс
+      </div>
+      <p>Кита Флинта не стало 4 марта 2019. Хоулетт и Максим продолжили. Группа вернулась в 2022 и до сих пор играет с той же яростью. Около 25 млн пластинок.</p>
+    </div>
+  </section>
+  <section id="p-albums" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография & История записи</h2>
+      <p style="margin-bottom:1.5rem;opacity:0.8">Нажми на альбом — полный трек-лист и детали</p>
+      <div class="prodigy-albums" id="prodigyAlbums"></div>
+    </div>
+  </section>
+  <section id="p-concerts" class="section">
+    <div class="container">
+      <h2 class="section-title">Крупнейшие концерты</h2>
+      <div class="concert-grid">
+        <div class="concert-card highlight">
+          <h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Манежная площадь, Москва — 27 сентября 1997</h4>
+          <p><strong>Самый массовый концерт в истории The Prodigy.</strong> 100–250 тысяч человек. MTV-трансляция. Сами музыканты называли эту публику одной из самых безумных.</p>
+        </div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Glastonbury 1995</h4><p>Дебют. Кит Флинт в гигантском хомячьем колесе.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Glastonbury 1997</h4><p>Первый танцевальный акт — хедлайнер главной сцены.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Lollapalooza 1997</h4><p>Хедлайнеры. Америка узнала The Prodigy как live-машину.</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Reading 1996 / 1998</h4><p>1998 — легендарный конфликт с Beastie Boys из-за «Smack My Bitch Up».</p></div>
+        <div class="concert-card"><h4 style="font-family:var(--font-display);color:var(--accent);margin-bottom:0.5rem">Glastonbury 2025</h4><p>Возвращение. Шоу посвящено «Mr. Fucking Flint».</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="p-influence" class="section">
+    <div class="container">
+      <h2 class="section-title">Влияние на электронную музыку</h2>
+      <ul class="influence-list">
+        <li><strong>Godfathers of Rave / Big Beat</strong> — «премьерный танцевальный акт для альтернативных масс».</li>
+        <li><strong>Electronic Punk</strong> — панк-энергия + рэйв-брейки + рок-шоуменство.</li>
+        <li><strong>Влияние на поколения</strong> — Skrillex называл их «первой опасной электронной группой».</li>
+        <li><strong>Live-культура</strong> — доказали, что электронный акт может быть таким же физическим, как рок-группа.</li>
+        <li><strong>Культурный прорыв</strong> — The Fat of the Land первым по-настоящему завоевал американский Billboard 200.</li>
+      </ul>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p>По мотивам книги Мартина Джеймса «The Prodigy. Мы живём ритмом» и открытых источников.</p>
+      <p style="margin-top:0.4rem">The Prodigy © 1990–2026 · Мы живём ритмом</p>
+    </div>
+  </footer>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+
+<!-- ==================== АЛЕКСАНДР ФЛОМАСТЕР ==================== -->
+<div id="page-flom" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back>
+        <span class="arrow">←</span>
+        <span>Назад к выбору</span>
+      </button>
+      <div class="nav-logo">ФЛОМАСТЕР</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#f-bio">Биография</a></li>
+      <li><a href="#f-path">Путь</a></li>
+      <li><a href="#f-rzt">РЗТ</a></li>
+      <li><a href="#f-system">Система</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.15em;font-size:0.85rem;margin-bottom:0.6rem">ОСНОВАТЕЛЬ РИСА ЗА ТВОРЧЕСТВО</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2.2rem,6vw,3.8rem);letter-spacing:0.08em;margin-bottom:0.6rem">АЛЕКСАНДР ФЛОМАСТЕР</h1>
+      <p class="hero-years">Александр Дубикин · Флом</p>
+      <p style="max-width:640px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Музыкальный критик, стример, судья баттлов. Создатель крупнейшего русскоязычного сообщества обозревателей музыки.</p>
+    </div>
+  </header>
+
+  <section id="f-bio" class="section">
+    <div class="container">
+      <h2 class="section-title">Биография</h2>
+      <div class="bio-grid" style="display:grid;gap:1.5rem">
+        <div>
+          <p style="margin-bottom:1rem;line-height:1.65">Александр Дубикин — человек, более известный как <strong>Фломастер</strong> (или просто Флом). Никнейм — не «флоу-мастер», как часто думают, а шуточная формула «философии мастер»: «сам себя не похвалишь — никто не похвалит».</p>
+          <p style="margin-bottom:1rem;line-height:1.65">Родился в Новосибирске. В 1989 году семья переехала в Алматы — отца перевели на строительство метро. Позже Александр жил и работал в разных городах; с сентября 2021 года — в Москве.</p>
+          <p style="margin-bottom:1rem;line-height:1.65">До музыки и стримов успел побывать в киберспорте, рекламе, инвестициях и коучинге. Этот опыт потом лёг в основу системности, с которой он подходит к оценке творчества.</p>
+        </div>
+        <div class="stats-row" style="display:flex;flex-wrap:wrap;gap:1rem">
+          <div class="stat-card"><span class="stat-number">2020</span><span class="stat-label">Старт РЗТ</span></div>
+          <div class="stat-card"><span class="stat-number">90</span><span class="stat-label">Балльная шкала</span></div>
+          <div class="stat-card"><span class="stat-number">РЗТ</span><span class="stat-label">Сайт + стримы</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="f-path" class="section">
+    <div class="container">
+      <h2 class="section-title">Путь</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2004–2009</div>
+          <div class="timeline-content">
+            <h3>Киберспорт</h3>
+            <p>Основатель клана <strong>K23</strong>. Играл в StarCraft, ездил на WCG в Сан-Франциско (2004). Был директором клуба и капитаном команды.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2009–2010</div>
+          <div class="timeline-content">
+            <h3>Хип-хоп и баттлы</h3>
+            <p>Участие в InDaBattle 2 (топ-32). Микстейп «фломастер — в цвете». Активный форумщик Hip-Hop.ru.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2010–2019</div>
+          <div class="timeline-content">
+            <h3>Судейство</h3>
+            <p>Судья независимых баттлов Hip-Hop.ru. Ввёл практику стримингового онлайн-судейства. Признан лучшим судьёй 17 Независимого баттла по мнению зрителей.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">до 2020</div>
+          <div class="timeline-content">
+            <h3>FlomasterPro</h3>
+            <p>Проект про психологию, саморазвитие и бытовые темы. Дискуссионный клуб с корнями ещё в 2011 году на Hip-Hop.ru.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">9 июня 2020</div>
+          <div class="timeline-content">
+            <h3>Рождение РЗТ</h3>
+            <p>Запуск «Риса за Творчество» — сначала как сопоставление известных треков в формате баттлов со сбором донатов в призовой фонд артистам.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2021 →</div>
+          <div class="timeline-content">
+            <h3>Система и рост</h3>
+            <p>Авторская 90-балльная шкала оценок, «Шкала ценности альбомов», сайт с рецензиями и рейтингами, YouTube, Twitch, Telegram. С сентября 2021 — Москва.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">15 окт 2025</div>
+          <div class="timeline-content">
+            <h3>Яндекс Музыка</h3>
+            <p>Официальное партнёрство: кураторская страница РЗТ в сервисе, развитие культуры рецензий и поддержка восходящих артистов.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="f-rzt" class="section">
+    <div class="container">
+      <h2 class="section-title">Риса За Творчество</h2>
+      <p style="margin-bottom:1.2rem;line-height:1.65;max-width:720px">Крупнейшее русскоязычное сообщество обозревателей и ценителей музыки. Обзоры релизов, пользовательские рецензии, рейтинги, премии и плейлисты. Основной фокус — русскоязычный рэп и актуальные новинки, но формат давно вышел за рамки одного жанра.</p>
+      <div class="concerts-grid">
+        <div class="concert-card">
+          <h3>Стримы</h3>
+          <p>Разборы новинок в прямом эфире (Twitch / YouTube). «Фрешсет», реакции, совместные эфиры с артистами.</p>
+        </div>
+        <div class="concert-card">
+          <h3>Сайт</h3>
+          <p><a href="https://risazatvorchestvo.com" target="_blank" rel="noopener" style="color:var(--accent)">risazatvorchestvo.com</a> — рейтинги, рецензии, профили пользователей.</p>
+        </div>
+        <div class="concert-card">
+          <h3>Сообщество</h3>
+          <p>Telegram, VK, Discord. Тысячи людей, которые слушают музыку внимательнее и спорят аргументированно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="f-system" class="section">
+    <div class="container">
+      <h2 class="section-title">Система оценок</h2>
+      <p style="margin-bottom:1rem;line-height:1.65">Фломастер выстроил прозрачную метрику вместо «нравится / не нравится»:</p>
+      <ul style="line-height:1.8;padding-left:1.2rem;margin-bottom:1.5rem">
+        <li><strong>90-балльная шкала</strong> — детальный разбор трека/альбома по критериям, а не одна общая цифра «от балды».</li>
+        <li><strong>Шкала ценности альбомов</strong> — попытка отделить хайп и медийность от художественного веса.</li>
+        <li><strong>Сравнение в формате баттлов</strong> — ранний формат РЗТ: два релиза «друг против друга», зрители голосуют донатами.</li>
+        <li><strong>Обратная связь артистам</strong> — разборы за донат / платные слоты на «Фрешсете», чтобы музыканты слышали конкретную критику.</li>
+      </ul>
+      <p style="opacity:0.85;line-height:1.55">Автор книги «Игра Правил». В интервью часто говорит об объективности оценки, искусстве, метамодерне и том, зачем вообще нужен критик в эпоху стриминга.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>По открытым источникам: интервью, Wikipedia, Афиша Daily, материалы РЗТ.</p>
+      <p style="margin-top:0.4rem">Александр Фломастер · Риса За Творчество · 2020 — н.в.</p>
+    </div>
+  </footer>
+  <div class="rzt-footer">
+    <a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener">
+      <span class="rzt-icon">🎵</span>
+      <span>Моя страница на Риса За Творчество</span>
+    </a>
+    <p class="rzt-note">risazatvorchestvo.com/user/109871</p>
+    <p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p>
+  </div>
+</div>
+
+
+<!-- ==================== PEPEL NAHUDI ==================== -->
+<div id="page-pepel" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">PEPEL NAHUDI</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#pe-bio">Биография</a></li>
+      <li><a href="#pe-path">Путь</a></li>
+      <li><a href="#pe-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">РЭП · ASHTRAY BLOC</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">PEPEL NAHUDI</h1>
+      <p class="hero-years">Дмитрий Артемьев · род. 28.01.2002</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Рэпер и звукорежиссёр из Каменска-Уральского. Прорыв — вирусный хит «Заново завоевать» и альбом KINGDOM MADE.</p>
+    </div>
+  </header>
+  <section id="pe-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem">Настоящее имя — <strong>Дмитрий Олегович Артемьев</strong>. Родился 28 января 2002 в Каменске-Уральском (Свердловская область). В подростковом возрасте занимался паркуром, после 9 класса пошёл в колледж — думал про завод. В 16 лет впервые записал голос и «залип».</p>
+    <p style="line-height:1.65;margin-bottom:1rem">С 2018 пишет свою музыку. Параллельно работал звукорежиссёром и сводил треки другим — это до сих пор часть его ремесла. Участник объединения <strong>ASHTRAY BLOC</strong>. Живёт и работает в Санкт-Петербурге.</p>
+  </div></section>
+  <section id="pe-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2018</div><div class="timeline-content"><h3>Старт</h3><p>Первые треки дома. Вдохновение — западный эмо-рэп. Сингл «37,5» и работа как микс-инженер.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020</div><div class="timeline-content"><h3>ПОСТАРШЕ</h3><p>Дебютный альбом и одноимённый трек — первая серьёзная волна внимания.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021–2022</div><div class="timeline-content"><h3>EP и синглы</h3><p>ZLATO, STEP BY STEP, DECEMBER17, DRUG RACING, SOBAKA — закрепление стиля.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023</div><div class="timeline-content"><h3>Прорыв</h3><p>«Заново завоевать» — №1 в российском Shazam, вирус в соцсетях. Альбом <em>KINGDOM MADE</em>.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2026</div><div class="timeline-content"><h3>Рост</h3><p>PSYCHEDELIC LOVE, Autumn Blues, туры, коллаборации (в т.ч. с xxxmanera). Сингл EDM (2025) — тизер альбома Eviema.</p></div></div>
+    </div>
+  </div></section>
+  <section id="pe-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — откроется история</p>
+      <div class="album-grid" id="pepelAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="pepelOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="pepelClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="pepelTitle"></h2>
+            <p class="album-year" id="pepelYear"></p>
+            <div class="album-meta" id="pepelMeta"></div>
+            <h3>История</h3>
+            <p id="pepelStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="pepelTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+<!-- ==================== KAI ANGEL ==================== -->
+<div id="page-kai" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">KAI ANGEL</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#ka-bio">Биография</a></li>
+      <li><a href="#ka-path">Путь</a></li>
+      <li><a href="#ka-disc">Релизы</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">РЭП · VIPERR · ПРОДЮСЕР</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">KAI ANGEL</h1>
+      <p class="hero-years">Дмитрий Ицков · род. 04.02.1997 · Брянск</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Рэпер, продюсер и клипмейкер. Бывший zavet, половина Viperr с 9mice. Forbes «30 до 30». Альбом <em>God System</em> — №1 Apple Music Россия.</p>
+    </div>
+  </header>
+  <section id="ka-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>Дмитрий Олегович Ицков</strong> родился 4 февраля 1997 в Брянске. Часть детства провёл в Израиле — отсюда иврит и татуировки. До своей музыки снимал клипы (Boulevard Depo, Saluki, HammAli &amp; Navai и др.).</p>
+    <p style="line-height:1.65;margin-bottom:1rem">Сначала выпускался как <strong>zavet</strong> — мрачный экспериментальный рэп, нойз, гитары. В 2022 перезапустился как <strong>Kai Angel</strong>: звук стал ближе к слушателю, но сохранил сломанный ритм и необычный инструментал.</p>
+  </div></section>
+  <section id="ka-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2018–2022</div><div class="timeline-content"><h3>zavet</h3><p>Клипмейкер → сольные релизы. Финал эпохи — макси-сингл <em>Doom</em> (февраль 2022).</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-content"><h3>Kai Angel + Viperr</h3><p>Новое имя. Знакомство с 9mice (одинаковые тату «angel» на шее). Дуэт Viperr, альбомы Heavy Metal / Heavy Metal 2.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023–2024</div><div class="timeline-content"><h3>Прорыв</h3><p><em>ANGEL MAY CRY</em>, <em>God System</em> (№1 Apple Music RU). Номинация Forbes «30 до 30».</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025–2026</div><div class="timeline-content"><h3>Соло</h3><p>Разрыв с 9mice. Альбомы <em>damage</em>, <em>Shh…</em> (студии в LA). Пост-панк, хаус, английские тексты.</p></div></div>
+    </div>
+  </div></section>
+    <section id="ka-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — откроется история</p>
+      <div class="album-grid" id="kaiAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="kaiOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="kaiClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="kaiTitle"></h2>
+            <p class="album-year" id="kaiYear"></p>
+            <div class="album-meta" id="kaiMeta"></div>
+            <h3>История</h3>
+            <p id="kaiStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="kaiTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+<!-- ==================== CUPSIZE ==================== -->
+<div id="page-cupsize" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">CUPSIZE</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#cu-bio">Биография</a></li>
+      <li><a href="#cu-path">Путь</a></li>
+      <li><a href="#cu-disc">Дискография</a></li>
+      <li><a href="#cu-band">Состав</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">ИНДИ · ГРАНЖ · ЯРОСЛАВЛЬ</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">CUPSIZE</h1>
+      <p class="hero-years">Николай Мамаев и группа · с 2020</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Гаражный инди / гранж из Ярославля. От гиперпопа к грязному вокалу и гитарам. Миллионы стримов, туры, скандалы и свой язык.</p>
+    </div>
+  </header>
+  <section id="cu-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>CUPSIZE</strong> — проект Николая Мамаева (род. 16 июля 2003, Ярославль; также Николай Лифонов). Название — отсылка к cup size. Стартовал в 2020 как сольный гиперпоп/рэп, позже вырос в полноценную группу.</p>
+    <p style="line-height:1.65;margin-bottom:1rem">Стиль: лоуфай, гранж, гаражный рок, ирония и абсурд в текстах. В 2024 — штраф суда Ярославля после доноса «Лиги безопасного интернета» (статья о пропаганде наркотиков) — волна внимания в СМИ. Группа остаётся в Ярославле, не переезжая в Москву.</p>
+  </div></section>
+  <section id="cu-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2020–2021</div><div class="timeline-content"><h3>Старт</h3><p>Throw Up, «Цветофобия», Pain from Love — гиперпоп и рэп.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023</div><div class="timeline-content"><h3>Поворот</h3><p>«е** меня, малышка», EP «дели на два», альбом «Как испортить вечеринку?» — гранж и сатира.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024</div><div class="timeline-content"><h3>Скандал и рост</h3><p>Суд / Мизулина. «Компромат». Группа оформляется как квартет.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025–2026</div><div class="timeline-content"><h3>Взлёт</h3><p>«В моих легких выросли цветы», «Заставь меня плакать» — топы The Flow и чарты Яндекс Музыки. ~70 концертов за год, VK Stadium в планах.</p></div></div>
+    </div>
+  </div></section>
+  <section id="cu-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — откроется история</p>
+      <div class="album-grid" id="cupsizeAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="cupsizeOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="cupsizeClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="cupsizeTitle"></h2>
+            <p class="album-year" id="cupsizeYear"></p>
+            <div class="album-meta" id="cupsizeMeta"></div>
+            <h3>История</h3>
+            <p id="cupsizeStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="cupsizeTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="cu-band" class="section"><div class="container">
+    <h2 class="section-title">Состав</h2>
+    <div class="concerts-grid">
+      <div class="concert-card"><h3>Николай Мамаев</h3><p>Вокал, тексты, гитара</p></div>
+      <div class="concert-card"><h3>Андрей Колесов</h3><p>Гитара</p></div>
+      <div class="concert-card"><h3>Ярослав Макаренко</h3><p>Бас</p></div>
+      <div class="concert-card"><h3>Сергей Крылов</h3><p>Барабаны</p></div>
+    </div>
+  </div></section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+<!-- ==================== TRAVIS SCOTT ==================== -->
+<div id="page-travis" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">TRAVIS SCOTT</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#tr-bio">Биография</a></li>
+      <li><a href="#tr-path">Путь</a></li>
+      <li><a href="#tr-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">TRAP · PSYCHEDELIC RAP · HOUSTON</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">TRAVIS SCOTT</h1>
+      <p class="hero-years">Jacques Webster II · с 2013</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Автотюн, атмосфера, Cactus Jack. От микстейпов Houston до Astroworld и Utopia — один из главных голосов хип-хопа 2010–2020-х.</p>
+    </div>
+  </header>
+  <section id="tr-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>Travis Scott</strong> (наст. имя Jacques Bermon Webster II, род. 30 апреля 1991, Houston, Texas) — рэпер, певец, продюсер и основатель лейбла <strong>Cactus Jack</strong>. Псевдоним собрал из имени дяди Travis и имени кумира Kid Cudi (Scott Mescudi).</p>
+    <p style="line-height:1.65;margin-bottom:1rem">Стиль: тяжёлый автотюн, полупение-полурэп, психоделический трап, коллаборации с десятками продюсеров и гостей. Вырос на GOOD Music (Kanye) и Grand Hustle (T.I.). Четыре студийных альбома подряд — №1 Billboard 200. В 2021 — трагедия на фестивале Astroworld (10 погибших); в 2023 вышел <em>Utopia</em>.</p>
+  </div></section>
+  <section id="tr-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2013–2014</div><div class="timeline-content"><h3>Микстейпы</h3><p>Owl Pharaoh, Days Before Rodeo — фундамент звука и аудитории.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015–2016</div><div class="timeline-content"><h3>Rodeo → Birds</h3><p>Дебют Rodeo (Antidote). Birds in the Trap — первый №1 альбом.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017–2018</div><div class="timeline-content"><h3>Astroworld</h3><p>Huncho Jack с Quavo. Astroworld — культовый релиз, SICKO MODE — первый №1 сингл.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021–2023</div><div class="timeline-content"><h3>Трагедия и Utopia</h3><p>Авария на Astroworld Festival. Через два года — Utopia, снова №1, FE!N, MY EYES, MELTDOWN.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2026</div><div class="timeline-content"><h3>Cactus Jack</h3><p>Фичи, туры, JackBoys 2. Один из самых стримящихся артистов планеты.</p></div></div>
+    </div>
+  </div></section>
+  <section id="tr-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на альбом — откроется история</p>
+      <div class="album-grid" id="travisAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="travisOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="travisClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="travisTitle"></h2>
+            <p class="album-year" id="travisYear"></p>
+            <div class="album-meta" id="travisMeta"></div>
+            <h3>История</h3>
+            <p id="travisStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="travisTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+
+<!-- ==================== SLATTCRANK ==================== -->
+<div id="page-slatt" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">SLATTCRANK</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#sl-bio">Биография</a></li>
+      <li><a href="#sl-path">Путь</a></li>
+      <li><a href="#sl-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">TRAP · HYPERPOP · ASHTRAY BLOC</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">SLATTCRANK</h1>
+      <p class="hero-years">Дмитрий Ручкин · с 2021</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">Уличный звук с Урала. Трэп, гиперпоп и дерзкий хип-хоп. Участник ASHTRAY BLOC, коллабы с Pepel Nahudi, VHQ Music.</p>
+    </div>
+  </header>
+  <section id="sl-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>Slattcrank</strong> (наст. имя Дмитрий Сергеевич Ручкин, род. 22 августа 2005, Каменск-Уральский) — российский рэп-исполнитель из Екатеринбурга. Участник объединения <strong>ASHTRAY BLOC</strong> (рядом с Pepel Nahudi).</p>
+    <p style="line-height:1.65;margin-bottom:1rem">Стиль: трэп, хип-хоп и гиперпоп-эксперименты. Сам называет это «уличным звуком парня с Урала» — дерзость, свобода, честность. Широкую известность принёс трек «Семь семь»; дальше — синглы вроде 22HOES, MICHELIN, коллабы «тысяча причин» и ROMEO с Pepel Nahudi. Лейбл / окружение: VHQ Music.</p>
+  </div></section>
+  <section id="sl-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2021–2022</div><div class="timeline-content"><h3>Старт</h3><p>Дебютные треки, «Покажи как», WORLDWIDE. Вход в ASHTRAY BLOC.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023–2024</div><div class="timeline-content"><h3>Прорыв</h3><p>«Семь семь», Million Dollar Baby, 22HOES, PARTYNEXTDOOR, ANOTHER ONE, MADE IN HEAVEN. Плотный поток синглов и EP.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><h3>Live Letter / NO CONCEPT</h3><p>Два EP: более собранный и экспериментальный звук. Концерты, фесты, связка с Pepel.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-content"><h3>DRAMATIST</h3><p>Полноценный альбом. SHE'S K#LLER, ROMEO (feat. Pepel Nahudi), гостевые Josodo и 6LOCKMYHEART. Эра Dramatist.</p></div></div>
+    </div>
+  </div></section>
+  <section id="sl-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на релиз — откроется история</p>
+      <div class="album-grid" id="slattAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="slattOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="slattClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="slattTitle"></h2>
+            <p class="album-year" id="slattYear"></p>
+            <div class="album-meta" id="slattMeta"></div>
+            <h3>История</h3>
+            <p id="slattStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="slattTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+
+<!-- ==================== LINKIN PARK ==================== -->
+<div id="page-lp" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">LINKIN PARK</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#lp-bio">Биография</a></li>
+      <li><a href="#lp-path">Путь</a></li>
+      <li><a href="#lp-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">NU-METAL · ALTERNATIVE · ELECTRONIC ROCK</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">LINKIN PARK</h1>
+      <p class="hero-years">1996 — настоящее время</p>
+      <p style="max-width:640px;margin:1rem auto 0;opacity:0.85;line-height:1.55">От Hybrid Theory до From Zero. Chester Bennington, Mike Shinoda, рэп + скрим, арены и новая глава с Emily Armstrong.</p>
+    </div>
+  </header>
+  <section id="lp-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>Linkin Park</strong> — американская группа из Агоры-Хиллз, Калифорния. Основаны в 1996 (сначала Xero, потом Hybrid Theory, затем Linkin Park). Ядро: <strong>Mike Shinoda</strong> (рэп, продакшн), <strong>Chester Bennington</strong> (вокал, до 2017), Joe Hahn, Brad Delson, Rob Bourdon, Dave «Phoenix» Farrell.</p>
+    <p style="line-height:1.65;margin-bottom:1rem"><em>Hybrid Theory</em> (2000) — один из самых продаваемых дебютов в истории рока (десятки миллионов копий). Nu-metal с электроникой и хип-хопом стал голосом поколения. 20 июля 2017 Chester ушёл из жизни. В 2024 группа вернулась с альбомом <em>From Zero</em>: вокал — <strong>Emily Armstrong</strong> (Dead Sara), барабаны — Colin Brittain.</p>
+  </div></section>
+  <section id="lp-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1996–2000</div><div class="timeline-content"><h3>Становление</h3><p>Xero → Hybrid Theory → Linkin Park. Chester присоединяется. Дебют Hybrid Theory взрывает чарты.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2003–2007</div><div class="timeline-content"><h3>Meteora → Minutes</h3><p>Meteora закрепляет статус. Minutes to Midnight — уход от чистого nu-metal к более широкому року.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2010–2014</div><div class="timeline-content"><h3>Эксперименты</h3><p>A Thousand Suns (электроника/концепт), Living Things, The Hunting Party (возврат тяжести).</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017</div><div class="timeline-content"><h3>One More Light и потеря</h3><p>Поп-рок One More Light. Гибель Chester Bennington. Пауза.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2026</div><div class="timeline-content"><h3>From Zero</h3><p>Возвращение: Emily Armstrong, Colin Brittain. Альбом From Zero, туры, новая эра.</p></div></div>
+    </div>
+  </div></section>
+  <section id="lp-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Студийные альбомы — нажми, чтобы открыть</p>
+      <div class="album-grid" id="lpAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="lpOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="lpClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="lpTitle"></h2>
+            <p class="album-year" id="lpYear"></p>
+            <div class="album-meta" id="lpMeta"></div>
+            <h3>История</h3>
+            <p id="lpStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="lpTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+
+<!-- ==================== MADK1D ==================== -->
+<div id="page-madkid" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">MADK1D</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#mk-bio">Биография</a></li>
+      <li><a href="#mk-path">Путь</a></li>
+      <li><a href="#mk-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">SOUNDCLOUD · SCAM-RAP · ПАНК</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">MADK1D</h1>
+      <p class="hero-years">Марк Серков · Томск · с 2020</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">От «Катюхи» и SoundCloud до sexyswag и чартов. Грязный звук, TikTok-хиты, коллабы с CUPSIZE, Villian, тёмным принцем.</p>
+    </div>
+  </header>
+  <section id="mk-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>madk1d</strong> (Мэдкид; наст. имя Марк Робертович Серков, род. 11 апреля 2002, Томск) — российский рэпер новой волны. SoundCloud, скам-рэп, панк, гиперпоп и лоу-фай — намеренно «грязный» звук и резкие тексты.</p>
+    <p style="line-height:1.65;margin-bottom:1rem">В 15 прошёл реабилитацию. Учился на сварщика, жил на студии, переехал в Москву. Первый хайп — «КАТЮХА» (2020). Прорыв 2025: альбом <em>sexyswag</em> (~16 минут) взорвал TikTok; «так похуй» и «ты че обиделась» — топы Яндекс Музыки. VK Music — «самый стремительный взлёт»; The Flow — sexyswag лучший альбом 2025. Коллабы с CUPSIZE, Villian («8 миля», «Династия»), тёмным принцем, 9mice, OG Buda.</p>
+  </div></section>
+  <section id="mk-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2020–2022</div><div class="timeline-content"><h3>SoundCloud</h3><p>«КАТЮХА», «Толпы», squad badmood. Локальный хайп, TikTok-ролики.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023–2024</div><div class="timeline-content"><h3>Альбомы</h3><p>«мир, труд, май», «Он сказал поехали!», «Извините за внимание». Переезд, студия, связка с CUPSIZE.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><h3>sexyswag</h3><p>Короткий альбом — главный буст. Чарт-топперы, тур, награда VK Music.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-content"><h3>Масштаб</h3><p>Дуеты с Villian, фиты с крупными именами, Forbes «30 до 30», большие площадки.</p></div></div>
+    </div>
+  </div></section>
+  <section id="mk-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на релиз — откроется история</p>
+      <div class="album-grid" id="madkidAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="madkidOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="madkidClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="madkidTitle"></h2>
+            <p class="album-year" id="madkidYear"></p>
+            <div class="album-meta" id="madkidMeta"></div>
+            <h3>История</h3>
+            <p id="madkidStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="madkidTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+
+<!-- ==================== ДОРА ==================== -->
+<div id="page-dora" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">ДОРА</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#dora-bio">Биография</a></li>
+      <li><a href="#dora-path">Путь</a></li>
+      <li><a href="#dora-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">КЬЮТ-РОК · INDIE POP · R&amp;B</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">ДОРА</h1>
+      <p class="hero-years">Дарья Шиханова · с 2019</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">От «Дорадуры» и кьют-рока до Miss и Lovesongs. Гитары, подростковая искренность и большой поп-размах.</p>
+    </div>
+  </header>
+  <section id="dora-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>Дора</strong> (Дарья Сергеевна Шиханова) — российская певица и автор песен. Начинала как Mental Affection, затем взяла имя, которым её звала мама. Rhymes Music.</p>
+    <p style="line-height:1.65;margin-bottom:1rem">В 2019 — EP «Я не коммерция» и альбом «Младшая сестра»; хит «Дорадура» (с участием Владимира Галата) — «Вечерний Ургант». 2020 — «Боже, храни кьют-рок». Дальше Miss (2022) с уклоном в R&amp;B/электропоп и Lovesongs (2024). Коллабы с Мэйби Бэйби, саундтреки, клипы, устойчивая аудитория тиктока и стримингов.</p>
+  </div></section>
+  <section id="dora-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2019</div><div class="timeline-content"><h3>Старт</h3><p>«Я не коммерция», «Младшая сестра», «Дорадура» — заявка кьют-рока.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020</div><div class="timeline-content"><h3>Боже, храни кьют-рок</h3><p>Второй альбом, гитарный поп, узнаваемый образ.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-content"><h3>Miss</h3><p>Больше электроники и R&amp;B. Loverboy, Я боюсь людей.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2026</div><div class="timeline-content"><h3>Lovesongs и дальше</h3><p>Lovesongs, синглы «Зависима», «ЁК», «Понарошку», коллабы.</p></div></div>
+    </div>
+  </div></section>
+  <section id="dora-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на релиз — история и стриминги</p>
+      <div class="album-grid" id="doraAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="doraOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="doraClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="doraTitle"></h2>
+            <p class="album-year" id="doraYear"></p>
+            <div class="album-meta" id="doraMeta"></div>
+            <h3>История</h3>
+            <p id="doraStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="doraTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+
+<!-- ==================== KRISTIEE ==================== -->
+<div id="page-kristiee" class="artist-page">
+  <nav class="navbar">
+    <div class="nav-left">
+      <button type="button" class="back-btn" data-back><span class="arrow">←</span><span>Назад к выбору</span></button>
+      <div class="nav-logo">KRISTIEE</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#kr-bio">Биография</a></li>
+      <li><a href="#kr-path">Путь</a></li>
+      <li><a href="#kr-disc">Дискография</a></li>
+    </ul>
+  </nav>
+  <header class="hero" style="padding:4rem 1.5rem 3rem;text-align:center">
+    <div class="container">
+      <p style="color:var(--accent);letter-spacing:0.12em;font-size:0.85rem">SOUNDCLOUD · CLOUD RAP · МОСКВА</p>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5.5vw,3.4rem);letter-spacing:0.06em">KRISTIEE</h1>
+      <p class="hero-years">Артемий Ермошин · с 2023</p>
+      <p style="max-width:620px;margin:1rem auto 0;opacity:0.85;line-height:1.55">От «Suka» и объединения 777 до РОМАНТИКА и Hanna Mantana. Молодой московский фрэшмен, cloud / trap и дерзкий вайб.</p>
+    </div>
+  </header>
+  <section id="kr-bio" class="section"><div class="container">
+    <h2 class="section-title">Биография</h2>
+    <p style="line-height:1.65;margin-bottom:1rem"><strong>KRISTIEE</strong> (наст. имя Артемий Александрович Ермошин, род. 28 сентября 2008, Москва) — российский рэп-исполнитель. Музыкой занимается с 2019, в медиа вышел около 2023. Первая широкая известность — трек «Suka».</p>
+    <p style="line-height:1.65;margin-bottom:1rem">Был в объединении <strong>777</strong> (рядом с Dope17, Mapt0v, Full Smena); после конфликта с Fallen777angel ушёл в соло. Стиль: cloud rap, trap, мелодичные фортепианные линии (в духе волны Урала Гайсина), влияние поп-панка в духе Пошлой Молли на отдельных треках. Хиты: «Dirty», «я не собираюсь мешать», «романтик», «Reverie». Альбомы <em>РОМАНТИКА</em> (2025) и <em>HANNA MANTANA</em> (2026).</p>
+  </div></section>
+  <section id="kr-path" class="section"><div class="container">
+    <h2 class="section-title">Путь</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2019–2023</div><div class="timeline-content"><h3>Старт</h3><p>Первые треки, вход в медиа. «Suka» — первый заметный хайп.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023–2024</div><div class="timeline-content"><h3>777 и соло</h3><p>Объединение 777, затем уход. EP «Suka from Arizona», синглы «тень» и др.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><h3>РОМАНТИКА</h3><p>Альбом и синглы: Dirty, я не собираюсь мешать, Reverie, Converse — стримовый взлёт.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-content"><h3>HANNA MANTANA</h3><p>Дебютный «взрослый» LP. Отсылка к Hannah Montana — переход образа. Фортепиано, cloud, провокация.</p></div></div>
+    </div>
+  </div></section>
+  <section id="kr-disc" class="section">
+    <div class="container">
+      <h2 class="section-title">Дискография</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Нажми на релиз — история и стриминги</p>
+      <div class="album-grid" id="kristieeAlbumGrid"></div>
+    </div>
+    <div class="album-overlay" id="kristieeOverlay">
+      <div class="album-detail">
+        <button class="close-btn" id="kristieeClose" type="button">&times;</button>
+        <div class="album-detail-content">
+          <div class="album-info">
+            <h2 id="kristieeTitle"></h2>
+            <p class="album-year" id="kristieeYear"></p>
+            <div class="album-meta" id="kristieeMeta"></div>
+            <h3>История</h3>
+            <p id="kristieeStory"></p>
+            <h3>Ключевые треки</h3>
+            <ul id="kristieeTracks"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rzt-footer"><a href="https://risazatvorchestvo.com/user/109871" target="_blank" rel="noopener"><span class="rzt-icon">🎵</span><span>Моя страница на Риса За Творчество</span></a><p class="rzt-copy">Сделано alones_ с помощью Claude и Grok, 2026.</p></div>
+</div>
+
+<script>
+(function () {
+  const hub = document.getElementById('hub');
+  const pages = {
+    manson: document.getElementById('page-manson'),
+    noize: document.getElementById('page-noize'),
+    pixie: document.getElementById('page-pixie'),
+    ye: document.getElementById('page-ye'),
+    prodigy: document.getElementById('page-prodigy'),
+    flom: document.getElementById('page-flom'),
+    pepel: document.getElementById('page-pepel'),
+    kai: document.getElementById('page-kai'),
+    cupsize: document.getElementById('page-cupsize'),
+    travis: document.getElementById('page-travis'),
+    slatt: document.getElementById('page-slatt'),
+    lp: document.getElementById('page-lp'),
+    madkid: document.getElementById('page-madkid'),
+    dora: document.getElementById('page-dora'),
+    kristiee: document.getElementById('page-kristiee')
+  };
+
+  let currentArtist = null;
+  let isTransitioning = false;
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      if (isTransitioning) return;
+      openArtist(card.dataset.artist);
+    });
+  });
+
+  // Все кнопки «Назад к выбору»
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-back]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (isTransitioning) return;
+    goHub();
+  });
+
+  function openArtist(name) {
+    if (!pages[name] || isTransitioning) return;
+    isTransitioning = true;
+    currentArtist = name;
+
+    closeOverlays();
+
+    hub.classList.add('hidden');
+    document.body.className = 'theme-' + name;
+
+    // сбрасываем инлайн-transform перед анимацией
+    Object.values(pages).forEach(p => { p.style.transform = ''; });
+
+    setTimeout(() => {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      const page = pages[name];
+      page.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      if (name === 'manson') initManson();
+      if (name === 'noize') initNoize();
+      if (name === 'ye') initYe();
+      if (name === 'prodigy') initProdigy();
+      if (name === 'pepel') initPepel();
+      if (name === 'kai') initKai();
+      if (name === 'cupsize') initCupsize();
+      if (name === 'travis') initTravis();
+      if (name === 'slatt') initSlatt();
+      if (name === 'lp') initLp();
+      if (name === 'madkid') initMadkid();
+      if (name === 'dora') initDora();
+      if (name === 'kristiee') initKristiee();
+
+      // после анимации убираем transform — иначе ломаются якоря (#cu-band) и sticky-navbar
+      setTimeout(() => {
+        if (page.classList.contains('active')) {
+          page.style.transform = 'none';
+        }
+        isTransitioning = false;
+      }, 520);
+    }, 480);
+  }
+
+  function goHub() {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    closeOverlays();
+
+    // Плавное исчезновение страницы артиста
+    Object.values(pages).forEach(p => {
+      if (p.classList.contains('active')) {
+        p.style.transform = ''; // вернуть анимацию leave
+        p.classList.add('leaving');
+        p.classList.remove('active');
+      }
+    });
+    document.body.className = '';
+    currentArtist = null;
+
+    setTimeout(() => {
+      Object.values(pages).forEach(p => {
+        p.classList.remove('leaving');
+        p.style.transform = '';
+      });
+      hub.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      isTransitioning = false;
+    }, 480);
+  }
+
+  // Внутренние якоря на страницах артистов (Состав, Биография и т.д.) — без ломания из-за transform
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('.artist-page .nav-links a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    e.stopPropagation();
+    // убедимся что transform сброшен
+    const page = a.closest('.artist-page');
+    if (page) page.style.transform = 'none';
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  function closeOverlays() {
+    ['pepelOverlay','kaiOverlay','cupsizeOverlay','travisOverlay','slattOverlay','lpOverlay','madkidOverlay','doraOverlay','kristieeOverlay'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    });
+    const mOverlay = document.getElementById('mansonOverlay');
+    const nOverlay = document.getElementById('noizeOverlay');
+    if (mOverlay) mOverlay.classList.remove('active');
+    if (nOverlay) nOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  /* Cursor glow */
+  const glow = document.querySelector('.cursor-glow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  /* ===== MANSON ===== */
+  const mansonAlbums = [
+    {id:'portrait',title:'Portrait of an American Family',year:1994,theme:'theme-portrait',color:'linear-gradient(135deg,#3a2218 0%,#c45c26 50%,#1a0f0a 100%)',cover:'covers/portrait.jpg',label:'Nothing / Interscope',producer:'Trent Reznor, Marilyn Manson',chart:'Gold (US)',story:'Запись началась в 1993 после контракта с Nothing Records. Студии Record Plant и Criteria в Майами. Обложка — бумажные куклы, созданные самим Мэнсоном. Альбом заложил основу индустриально-металлического звучания группы.',tracks:['Cake and Sodomy','Lunchbox','Dope Hat','Get Your Gunn','Organ Grinder']},
+    {id:'antichrist',title:'Antichrist Superstar',year:1996,theme:'theme-antichrist',color:'linear-gradient(135deg,#1a0a0a 0%,#8b0000 40%,#0d0505 100%)',cover:'covers/antichrist.jpg',label:'Nothing / Interscope',producer:'Trent Reznor, Dave Ogilvie, Marilyn Manson',chart:'№3 Billboard, 7+ млн',story:'Концептуальный альбом-трилогия о трансформации «червя» в «Антихриста Суперзвезду». Nothing Studios, Новый Орлеан. Напряжённый процесс записи. Прорыв — дебют на 3-м месте Billboard, платина. Тур Dead to the World.',tracks:['The Beautiful People','Tourniquet','Irresponsible Hate Anthem','Angel with the Scabbed Wings','Man That You Fear']},
+    {id:'mechanical',title:'Mechanical Animals',year:1998,theme:'theme-mechanical',color:'linear-gradient(135deg,#2a1828 0%,#e8a0c0 40%,#1a1018 100%)',cover:'covers/mechanical.jpg',label:'Nothing / Interscope',producer:'Michael Beinhorn, Marilyn Manson',chart:'№1 Billboard 200',story:'Отход к глэм-року 70-х. Образ андрогинного инопланетянина Omega. Обложка с протезными грудями вызвала скандал. Первый №1 группы. Критика Голливуда и отчуждения знаменитостей.',tracks:['The Dope Show','Rock Is Dead','Mechanical Animals','I Don\'t Like the Drugs','Coma White']},
+    {id:'holywood',title:'Holy Wood',year:2000,theme:'theme-holywood',color:'linear-gradient(135deg,#111 0%,#fff 30%,#000 100%)',cover:'covers/holywood.jpg',label:'Nothing / Interscope',producer:'Dave Sardy, Marilyn Manson',chart:'№13 Billboard',story:'Прямой ответ на обвинения после Колумбайна. Жёсткая критика медиа, оружия и религии. Обложка — Мэнсон на кресте. Завершает трилогию Antichrist — Mechanical — Holy Wood.',tracks:['Disposable Teens','The Fight Song','The Love Song','Target Audience','The Nobodies']},
+    {id:'grotesque',title:'The Golden Age of Grotesque',year:2003,theme:'theme-grotesque',color:'linear-gradient(135deg,#1a1510 0%,#d4af37 40%,#0f0c08 100%)',cover:'covers/grotesque.jpg',label:'Nothing / Interscope',producer:'Tim Sköld, Marilyn Manson',chart:'№1 Billboard',story:'Веймар, кабаре, бурлеск и «дегенеративное искусство». Обложка с художником Готтфридом Хельнвайном. Более электронный и танцевальный звук. Снова №1 в Billboard.',tracks:['mOBSCENE','This Is the New Shit','Doll-Dagga Buzz-Buzz Ziggety-Zag','Use Your Fist and Not Your Mouth','The Golden Age of Grotesque']},
+    {id:'eatme',title:'Eat Me, Drink Me',year:2007,theme:'theme-eatme',color:'linear-gradient(135deg,#12121e 0%,#6b5b95 50%,#0a0a12 100%)',cover:'covers/eatme.jpg',label:'Interscope',producer:'Tim Sköld, Marilyn Manson',chart:'№8 Billboard',story:'Самый личный и эмоциональный альбом. Период развода с Дитой фон Тиз и отношений с Эван Рейчел Вуд. Более гитарный, мелодичный и меланхоличный.',tracks:['Heart-Shaped Glasses','Putting Holes in Happiness','If I Was Your Vampire','Are You the Rabbit?','Just a Car Crash Away']},
+    {id:'highend',title:'The High End of Low',year:2009,theme:'theme-highend',color:'linear-gradient(135deg,#161616 0%,#ff2d55 40%,#0c0c0c 100%)',cover:'covers/highend.jpg',label:'Interscope',producer:'Sean Beavan, Marilyn Manson',chart:'№4 Billboard',story:'Последний альбом на Interscope. Сырой, агрессивный и эмоционально открытый. После расставания с Эван Рейчел Вуд. Мэнсон сам играл на многих инструментах.',tracks:['Arma-goddamn-motherfuckin-geddon','We\'re from America','I Want to Kill You Like They Do in the Movies','Devour','Four Rusted Horses']},
+    {id:'born',title:'Born Villain',year:2012,theme:'theme-born',color:'linear-gradient(135deg,#101810 0%,#4a7c4a 40%,#0a0f0a 100%)',cover:'covers/born.jpg',label:'Cooking Vinyl',producer:'Marilyn Manson, Chris Vrenna',chart:'№10 Billboard',story:'Первый альбом на независимом лейбле. Возвращение к тяжёлому индустриальному звучанию. «No Reflection» получил номинацию на Грэмми.',tracks:['No Reflection','Slo-Mo-Tion','Pistol Whipped','Overneath the Path of Misery','Murderers Are Getting Prettier Every Day']},
+    {id:'pale',title:'The Pale Emperor',year:2015,theme:'theme-pale',color:'linear-gradient(135deg,#121212 0%,#c0c0c0 40%,#0a0a0a 100%)',cover:'covers/pale.jpg',label:'Loma Vista',producer:'Tyler Bates, Marilyn Manson',chart:'№8 Billboard',story:'Критический камбэк. Сотрудничество с Тайлером Бейтсом. Более блюзовый, атмосферный и зрелый звук. Один из сильнейших поздних альбомов.',tracks:['Third Day of a Seven Day Binge','Deep Six','The Mephistopheles of Los Angeles','Cupid Carries a Gun','Odds of Even']},
+    {id:'heaven',title:'Heaven Upside Down',year:2017,theme:'theme-heaven',color:'linear-gradient(135deg,#120f1a 0%,#9b59b6 40%,#0a080f 100%)',cover:'covers/heaven.jpg',label:'Loma Vista',producer:'Tyler Bates, Marilyn Manson',chart:'№8 Billboard',story:'Продолжение сотрудничества с Тайлером Бейтсом. Тяжёлые риффы и атмосферность. Клипы на «WE KNOW WHERE YOU FUCKING LIVE» и «Kill4Me». Успешный тур.',tracks:['WE KNOW WHERE YOU FUCKING LIVE','Kill4Me','SAY10','Heaven Upside Down','Tattooed in Reverse']},
+    {id:'chaos',title:'We Are Chaos',year:2020,theme:'theme-chaos',color:'linear-gradient(135deg,#1a1212 0%,#e74c3c 40%,#0f0a0a 100%)',cover:'covers/chaos.jpg',label:'Loma Vista',producer:'Shooter Jennings, Marilyn Manson',chart:'№8 Billboard',story:'Сотрудничество с Шутером Дженнингсом. Более мелодичный звук с элементами психоделии. Обложка — акварели самого Мэнсона. Вышел в разгар пандемии.',tracks:['We Are Chaos','Don\'t Chase the Dead','Paint You With My Love','Half-Way & One Step Forward','Broken Needle']},
+    {id:'assassination',title:'One Assassination Under God – Chapter 1',year:2024,theme:'theme-assassination',color:'linear-gradient(135deg,#101010 0%,#b71c1c 40%,#080808 100%)',cover:'covers/assassination.jpg',label:'Nuclear Blast',producer:'Tyler Bates, Marilyn Manson',chart:'№32 Billboard 200',story:'Первый альбом после нескольких лет молчания и скандалов. Вышел 22 ноября 2024 на Nuclear Blast. Начало новой концептуальной главы. Поддержан масштабным мировым туром. Синглы: Raise the Red Flag, As Sick as the Secrets Within, Sacrilegious.',tracks:['One Assassination Under God','Raise the Red Flag','As Sick as the Secrets Within','Sacrilegious','No Funeral Without Appeal']},
+    {id:'chapter2',title:'One Assassination Under God – Chapter 2',year:2026,theme:'theme-assassination',color:'linear-gradient(135deg,#2a2a20 0%,#8a9a6a 40%,#1a1a14 100%)',cover:'covers/chapter2.jpg',label:'Nuclear Blast',producer:'Tyler Bates, Marilyn Manson',chart:'№41 Billboard 200',story:'Тринадцатый студийный альбом. Вышел 14 августа 2026 на Nuclear Blast. Продолжение и завершение главы, начатой Chapter 1. Записывался в The Abattoir (Лос-Анджелес), NRG и EastWest (Голливуд) с апреля 2023 по апрель 2024. Сопродюсер — Тайлер Бейтс (последняя совместная работа: он ушёл из live-состава в январе 2026). Синглы: Exit Wound (12 июня), Front Toward Enemy (17 июля), Unalive (14 августа). Обложка — автопортрет-картина Мэнсона. Звук ближе к Mechanical Animals и Pale Emperor: мелодичнее Chapter 1, с индустриальными текстурами и готик-роком.',tracks:['Unalive','Front Toward Enemy','Exit Wound','None of the Suns','Lucifer\'s Teardrop','Enantiomorph']}
+  ];
+
+  function initManson() {
+    const grid = document.getElementById('mansonAlbumGrid');
+    if (!grid || grid.children.length) return;
+    mansonAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Marilyn Manson', a.title, a)}</div>`;
+      card.onclick = () => openMansonAlbum(a);
+      grid.appendChild(card);
+    });
+  }
+  function openMansonAlbum(a) {
+    // Меняем только accent, не ломаем читаемость текста
+    document.documentElement.style.setProperty('--accent', getComputedStyle(document.body).getPropertyValue('--accent') || '#c41e3a');
+    if (a.theme) document.body.className = 'theme-manson ' + a.theme;
+
+    document.getElementById('mansonTitle').textContent = a.title;
+    document.getElementById('mansonYear').textContent = a.year;
+    document.getElementById('mansonMeta').innerHTML =
+      `<span>${a.label}</span><span>${a.producer}</span><span>${a.chart}</span>` +
+      streamOverlayLinks('Marilyn Manson', a.title, a);
+    document.getElementById('mansonStory').textContent = a.story;
+    document.getElementById('mansonTracks').innerHTML =
+      a.tracks.map(t => `<li>${t}</li>`).join('');
+
+    // Цветная полоска вместо обложки
+    const coverEl = document.getElementById('mansonCover');
+    if (coverEl) {
+      coverEl.style.display = 'none';
+    }
+
+    const mOv = document.getElementById('mansonOverlay');
+    if (mOv && mOv.parentElement !== document.body) document.body.appendChild(mOv);
+    mOv.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  document.getElementById('mansonClose').onclick = () => {
+    document.getElementById('mansonOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    if (currentArtist) document.body.className = 'theme-' + currentArtist;
+  };
+  document.getElementById('mansonOverlay').onclick = e => {
+    if (e.target.id === 'mansonOverlay') document.getElementById('mansonClose').click();
+  };
+
+
+
+  /* ===== PEPEL NAHUDI ===== */
+  const pepelAlbums = [
+    {title:'ПОСТАРШЕ',year:2020,color:'linear-gradient(135deg,#1a1228 0%,#a78bfa 45%,#0d0a14 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'Дебют',story:'Первый полноформатный альбом. Трэп и классический хип-хоп. Одноимённый трек дал первую серьёзную волну популярности. Дмитрий уже работал как звукорежиссёр и сводил материал сам.',tracks:['ПОСТАРШЕ','37,5']},
+    {title:'ZLATO',year:2021,color:'linear-gradient(135deg,#1a1810 0%,#c9a227 40%,#0c0a06 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'EP',story:'Продолжение линии после дебюта. Более отточенный звук, работа над образом и сведением.',tracks:['ZLATO']},
+    {title:'DECEMBER17',year:2021,color:'linear-gradient(135deg,#0f1520 0%,#60a5fa 40%,#080a10 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'EP',story:'Зимний релиз. Эмоциональные тексты и плотный бит. Часть серии 2021 года, когда артист выпускал много материала подряд.',tracks:['DECEMBER17']},
+    {title:'DRUG RACING',year:2021,color:'linear-gradient(135deg,#1a0a12 0%,#f43f5e 40%,#0c0608 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'EP',story:'Агрессивнее и быстрее. Название и эстетика отражают «гоночный» вайб улицы и ночных поездок.',tracks:['DRUG RACING']},
+    {title:'SOBAKA',year:2022,color:'linear-gradient(135deg,#141414 0%,#a3a3a3 40%,#0a0a0a 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'EP',story:'Сырой и прямой релиз. Закрепление стиля перед большим прорывом следующего года.',tracks:['SOBAKA']},
+    {title:'KINGDOM MADE',year:2023,color:'linear-gradient(135deg,#1a1020 0%,#c084fc 40%,#0c0812 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'Shazam №1 RU',story:'Главный прорыв. Трек «Заново завоевать» стал вирусным в соцсетях и занял 1-е место в российском Shazam. Альбом собрал меланхоличный гитарный звук и уличные истории. Также: «Звезда упала».',tracks:['Заново завоевать','Звезда упала','Сообщения','Целую']},
+    {title:'PSYCHEDELIC LOVE',year:2024,color:'linear-gradient(135deg,#120a1a 0%,#e879f9 40%,#0a0610 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'Альбом',story:'Психоделия и любовь. Более атмосферный и экспериментальный по сравнению с KINGDOM MADE. Продолжение эволюции звука.',tracks:['PSYCHEDELIC LOVE']},
+    {title:'AUTUMN BLUES',year:2024,color:'linear-gradient(135deg,#1a1410 0%,#d4a574 40%,#0c0a08 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'Альбом',story:'Осенний меланхоличный релиз после PSYCHEDELIC LOVE. Гитарные текстуры и личные тексты.',tracks:['AUTUMN BLUES']},
+    {title:'GARGONNA MUSIC',year:2025,color:'linear-gradient(135deg,#0c1018 0%,#6366f1 40%,#080a10 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'Альбом · 27 июн 2025',story:'Параллельно шло промо будущего KM2. Дима сравнивал оба релиза. Финальный трек содержит зашифрованный телефонный номер с отсылкой к Beyond Empire.',tracks:['GARGONNA MUSIC']},
+    {title:'EVIEMA',year:2026,color:'linear-gradient(135deg,#0a1218 0%,#38bdf8 40%,#060a0e 100%)',label:'VHQ MUSIC',producer:'Pepel Nahudi',chart:'2026',story:'Линия после сингла EDM. Личная лирика, расставание, сожжённые мосты.',tracks:['EDM','EVIEMA']},
+    {title:'43:19',year:2026,color:'linear-gradient(135deg,#020807 0%,#22c55e 35%,#0a1a12 100%)',label:'VHQ MUSIC',producer:'Pepel Nahudi',chart:'EP · 6 треков · апр 2026',story:'Короткий плотный EP (~10 мин). На обложке неоновые часы 43:19. Треки: ADVOCATE, GOSSIP, AKINATOR, BLAME BANK, BYE BAE!, «никто нам не поможет».',tracks:['ADVOCATE','GOSSIP','AKINATOR','BLAME BANK','BYE BAE!','никто нам не поможет']},
+    {title:'KM2: Beyond Empire',year:2026,color:'linear-gradient(135deg,#0a0a0c 0%,#a1a1aa 30%,#52525b 70%,#050505 100%)',label:'Independent',producer:'Pepel Nahudi',chart:'30 окт 2026 · 17 треков',story:'Четвёртый сольный альбом, продолжение KINGDOM MADE. Анонс 3 мая 2025. Запись ~4 года, из ~50 треков отобрано 17. «Я построил империю, чтобы выйти за её пределы». Трэп + рок-гитары. Гости: Мэйби Бэйби, Витя Кончина, nkeeei, xxxmanera, Slattcrank.',tracks:['не могу тебя так оставить','безнадежный роман','ВДОХНУТЬ','на мне умирай','самим собой','антигерой','УЙТИ В ОГОНЬ','MUSEUM','MOGGED','BALDININI','осколки','новое солнце']}
+  ];
+
+  function initPepel() {
+    const grid = document.getElementById('pepelAlbumGrid');
+    if (!grid || grid.children.length) return;
+    pepelAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Pepel Nahudi', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'pepel');
+      grid.appendChild(card);
+    });
+  }
+
+  /* ===== KAI ANGEL ===== */
+  const kaiAlbums = [
+    {title:'Doom',year:2022,color:'linear-gradient(135deg,#0a0a0a 0%,#525252 40%,#050505 100%)',label:'Independent',producer:'zavet / Kai Angel',chart:'Макси-сингл',story:'Последний крупный релиз под именем zavet (февраль 2022). Три трека. Мрачный экспериментальный звук — нойз, гитары, индустриал. После этого Дмитрий объявил паузу zavet и перезапуск как Kai Angel.',tracks:['Doom']},
+    {title:'kAiCoRe',year:2022,color:'linear-gradient(135deg,#1a0a12 0%,#f43f5e 40%,#0c0608 100%)',label:'DNK Music',producer:'Kai Angel',chart:'EP',story:'Первый релиз уже как Kai Angel (1 июля 2022). Новый ник, более «близкий» к слушателю звук, но с фирменной ломаной ритмикой.',tracks:['kAiCoRe']},
+    {title:'ANGEL MAY CRY',year:2023,color:'linear-gradient(135deg,#100818 0%,#e11d48 40%,#08040c 100%)',label:'VIPERR / KOALA',producer:'Kai Angel',chart:'Альбом',story:'Сольный альбом. Эстетика «ангела», тяжёлые и мелодичные треки. Один из столпов раннего периода Kai Angel.',tracks:['ANGEL MAY CRY']},
+    {title:'Heavy Metal',year:2023,color:'linear-gradient(135deg,#0c0c0c 0%,#a1a1aa 35%,#f43f5e 70%,#050505 100%)',label:'DNK / VIPERR',producer:'Kai Angel, 9mice',chart:'Viperr',story:'Совместный альбом с 9mice. Дуэт Viperr. Тяжёлый, агрессивный, мемный и вирусный. Задал тон целому направлению в русскоязычном рэпе 2023–24.',tracks:['Heavy Metal']},
+    {title:'Heavy Metal 2',year:2023,color:'linear-gradient(135deg,#0c0c0c 0%,#71717a 30%,#fb7185 70%,#050505 100%)',label:'VIPERR',producer:'Kai Angel, 9mice',chart:'Viperr',story:'Продолжение. Ещё больше хайпа, туров и узнаваемости. Пик совместного проекта перед последующим разрывом.',tracks:['Heavy Metal 2']},
+    {title:'God System',year:2024,color:'linear-gradient(135deg,#0a0610 0%,#f43f5e 35%,#c084fc 70%,#050308 100%)',label:'VIPERR / KOALA',producer:'Kai Angel',chart:'№1 Apple Music RU',story:'Сольный альбом, возглавивший российский чарт Apple Music. Треки вроде «DANCE LIKE U IN PAIN», «SPIDERR». Forbes «30 до 30». Момент, когда Kai Angel окончательно стал мейнстрим-фигурой новой школы.',tracks:['DANCE LIKE U IN PAIN','SPIDERR','God System']},
+    {title:'damage',year:2025,color:'linear-gradient(135deg,#0a0a0c 0%,#e11d48 40%,#1e1b4b 100%)',label:'Independent',producer:'Kai Angel',chart:'Соло после Viperr',story:'После разрыва с 9mice. 17 треков. Английские тексты, пост-панк, хаус, техно. Меньше «тяжёлого металла» Viperr, больше боли и клубной тьмы.',tracks:['amy','fire walk with me','damage']},
+    {title:'Shh…',year:2026,color:'linear-gradient(135deg,#0c0a0a 0%,#f43f5e 30%,#64748b 100%)',label:'Independent',producer:'Kai Angel',chart:'LA sessions',story:'Доведён в лос-анджелесских студиях (в т.ч. местах, связанных с The Doors и Velvet Underground). Тише по названию, но не по содержанию — зрелая сольная глава.',tracks:['Shh…']}
+  ];
+
+  function initKai() {
+    const grid = document.getElementById('kaiAlbumGrid');
+    if (!grid || grid.children.length) return;
+    kaiAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Kai Angel', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'kai');
+      grid.appendChild(card);
+    });
+  }
+
+  /* ===== CUPSIZE ===== */
+  const cupsizeAlbums = [
+    {title:'Throw Up',year:2020,color:'linear-gradient(135deg,#0a1218 0%,#38bdf8 40%,#061018 100%)',label:'Independent',producer:'CUPSIZE',chart:'EP',story:'Дебютный мини-альбом. Гиперпоп и рэп. Николай Мамаев только запускает проект в Ярославле.',tracks:['Throw Up']},
+    {title:'Цветофобия',year:2021,color:'linear-gradient(135deg,#1a1020 0%,#c084fc 40%,#0c0812 100%)',label:'Independent',producer:'CUPSIZE',chart:'EP',story:'Продолжение экспериментов с гиперпопом. Название — метафора восприятия.',tracks:['Цветофобия']},
+    {title:'Pain from Love',year:2021,color:'linear-gradient(135deg,#1a0a12 0%,#f472b6 40%,#0c0608 100%)',label:'Independent',producer:'CUPSIZE',chart:'Альбом',story:'Боль и любовь. Ещё в электронной/рэп-эстетике, до большого поворота в гранж.',tracks:['Pain from Love']},
+    {title:'е** меня, малышка',year:2023,color:'linear-gradient(135deg,#0c0c0c 0%,#f97316 40%,#1c1917 100%)',label:'Independent',producer:'CUPSIZE',chart:'Поворот',story:'Ключевой релиз: переход от гиперпопа к гранжу. Провокационное название, сырой звук, новая аудитория.',tracks:['е** меня, малышка','Трамадол']},
+    {title:'дели на два',year:2023,color:'linear-gradient(135deg,#0a1018 0%,#38bdf8 35%,#64748b 100%)',label:'Independent',producer:'CUPSIZE',chart:'EP',story:'Любовные темы в сатирической подаче. Классическая ирония CUPSIZE.',tracks:['дели на два']},
+    {title:'Как испортить вечеринку?',year:2023,color:'linear-gradient(135deg,#0c0a0a 0%,#22d3ee 30%,#f43f5e 70%,#050505 100%)',label:'Independent',producer:'CUPSIZE',chart:'Прорывной LP',story:'Полноформатник. Сатира, абсурд, грязный вокал. Вдохновение Валентином Стрыкало. Поворотный релиз для российской инди/гранж-сцены.',tracks:['Юра, Юра','По улице иду я','Они все дрочат на тебя в интернете','Стенки моего подъезда','Василий','Травматика','И это прекрасно','Клей','Целовались','Пьяные','Высокий градус','Семнадцатилетняя','Я схожу с ума']},
+    {title:'Компромат',year:2024,color:'linear-gradient(135deg,#0a0a0c 0%,#94a3b8 40%,#0f172a 100%)',label:'Independent',producer:'CUPSIZE',chart:'2024',story:'Год скандала с судом Ярославля. Релиз в гуще информационного шума — группа уже как квартет.',tracks:['Компромат']},
+    {title:'В моих легких выросли цветы',year:2025,color:'linear-gradient(135deg,#0a120e 0%,#4ade80 35%,#38bdf8 100%)',label:'Independent',producer:'CUPSIZE',chart:'Топ The Flow',story:'Вошёл в топ лучших релизов года по версии The Flow. Лоуфай, гранж, зрелые тексты.',tracks:['В моих легких выросли цветы']},
+    {title:'Заставь меня плакать',year:2025,color:'linear-gradient(135deg,#0c0a12 0%,#38bdf8 30%,#e879f9 70%,#08060c 100%)',label:'Copper Pipes',producer:'CUPSIZE',chart:'Чарты ЯМ · 26 треков',story:'После релиза десятки треков в чарте Яндекс Музыки. «ПМС-гранж», миллионная аудитория. Двойной альбом с иронией, травмой и абсурдом.',tracks:['семнадцать ножевых','детская травма','вся моя жизнь говно','будка','розовая могила','следак','черновик','первокурсница','ЗППП','станция со мной','верёвка','я без ума от тебя','малолетки','сигареты','неудобно','прыгай, дура!']}
+  ];
+
+  function initCupsize() {
+    const grid = document.getElementById('cupsizeAlbumGrid');
+    if (!grid || grid.children.length) return;
+    cupsizeAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('CUPSIZE', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'cupsize');
+      grid.appendChild(card);
+    });
+  }
+
+  const travisAlbums = [
+    {title:'Owl Pharaoh',year:2013,color:'linear-gradient(135deg,#1a1208 0%,#f59e0b 35%,#0a0804 100%)',label:'Grand Hustle',producer:'Travis Scott',chart:'Микстейп',story:'Дебютный микстейп. Houston, автотюн, связь с T.I. и GOOD Music. Заложил основу фирменного «психоделического» трапа.',tracks:['Upper Echelon','Blocka La Flame','Chaz Interlude'],spotify:'https://open.spotify.com/search/Owl%20Pharaoh%20Travis%20Scott'},
+    {title:'Days Before Rodeo',year:2014,color:'linear-gradient(135deg,#0c0a08 0%,#b45309 40%,#1c1008 100%)',label:'Grand Hustle',producer:'Travis Scott',chart:'Микстейп-культ',story:'Преддверие дебюта. Атмосфера, коллабы, уже узнаваемый вокал. До сих пор считается одним из лучших «дорожных» релизов 2010-х.',tracks:['Don\'t Play','Mamacita','Drugs You Should Try It','Skyfall'],spotify:'https://open.spotify.com/album/54Y471E7GNBSOXjZtqONId'},
+    {title:'Rodeo',year:2015,color:'linear-gradient(135deg,#120a08 0%,#ea580c 40%,#0a0604 100%)',label:'Epic / Grand Hustle',producer:'Travis Scott + команда',chart:'Дебютный LP · #3',story:'Первый студийник. Antidote — прорывной сингл. Future, The Weeknd, Justin Bieber в гостях. Номер 3 Billboard 200.',tracks:['Antidote','3500','90210','Oh My Dis Side','Pornography'],spotify:'https://open.spotify.com/album/4PWBTB6NYSKQwfo79I3prg'},
+    {title:'Birds in the Trap Sing McKnight',year:2016,color:'linear-gradient(135deg,#0a0c12 0%,#6366f1 40%,#08080c 100%)',label:'Epic / Cactus Jack',producer:'Travis Scott',chart:'№1 Billboard 200',story:'Первый чарттоппер. goosebumps с Kendrick Lamar — гигантский хит. Более мелодичный и «ночной» альбом.',tracks:['goosebumps','pick up the phone','beibs in the trap','through the late night','coordinate'],spotify:'https://open.spotify.com/album/42WVQWuf1teDysXiOupIZt'},
+    {title:'Huncho Jack, Jack Huncho',year:2017,color:'linear-gradient(135deg,#0c1008 0%,#84cc16 40%,#0a0c06 100%)',label:'Cactus Jack / Quality Control',producer:'Travis Scott & Quavo',chart:'Коллаб · #3',story:'Дуэт с Quavo. Короткий, плотный, хиты на радио и в стримах. Мост между Birds и Astroworld.',tracks:['Modern Slavery','Black & Chinese','Eye 2 Eye','Dubai Shit'],spotify:'https://open.spotify.com/album/6FED8aeieEnUWwQqAO9zT1'},
+    {title:'Astroworld',year:2018,color:'linear-gradient(135deg,#1a1008 0%,#f59e0b 25%,#ec4899 60%,#0a0806 100%)',label:'Cactus Jack / Epic',producer:'Travis Scott + 29 продюсеров',chart:'№1 · 6× Platinum',story:'Культовый альбом. Назван в честь снесённого парка Six Flags AstroWorld в Houston. SICKO MODE — первый №1 сингл Travis, 30+ недель в топ-10 Hot 100. Frank Ocean, Drake, Kid Cudi, Stevie Wonder.',tracks:['SICKO MODE','STARGAZING','BUTTERFLY EFFECT','SKELETONS','STOP TRYING TO BE GOD','ASTROTHUNDER','COFFEE BEAN'],spotify:'https://open.spotify.com/album/41GuZcammIkupMPKH2OJ6I'},
+    {title:'Utopia',year:2023,color:'linear-gradient(135deg,#0a080c 0%,#f59e0b 30%,#7c3aed 70%,#060408 100%)',label:'Cactus Jack / Epic',producer:'Travis Scott + James Blake, WondaGurl и др.',chart:'№1 · Grammy nom.',story:'Первый альбом после трагедии на Astroworld Festival 2021. 19 треков, почти 75 минут. Beyoncé, Drake, Playboi Carti, The Weeknd, Bad Bunny, Bon Iver. FE!N, MY EYES, MELTDOWN — главные синглы.',tracks:['FE!N','MY EYES','MELTDOWN','TELEKINESIS','K-POP','I KNOW ?','HYAENA'],spotify:'https://open.spotify.com/album/18NOKLkZETa4sWwLMIm0UZ'}
+  ];
+
+  function initTravis() {
+    const grid = document.getElementById('travisAlbumGrid');
+    if (!grid || grid.children.length) return;
+    travisAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Travis Scott', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'travis');
+      grid.appendChild(card);
+    });
+  }
+
+  const slattAlbums = [
+    {title:'WORLDWIDE',year:2022,color:'linear-gradient(135deg,#1a0a10 0%,#fb7185 40%,#0a0608 100%)',label:'Independent',producer:'Slattcrank',chart:'Ранний релиз',story:'Один из первых полноценных заявок. Екатеринбург, ASHTRAY BLOC, поиск своего «уличного» звука.',tracks:['WORLDWIDE'],spotify:'https://open.spotify.com/search/WORLDWIDE%20Slattcrank'},
+    {title:'PARTYNEXTDOOR',year:2024,color:'linear-gradient(135deg,#0c0a12 0%,#a78bfa 40%,#08060c 100%)',label:'VHQ Music',producer:'Slattcrank',chart:'EP / сингл-эра',story:'Отсылка к PartyNextDoor. Эксперименты со звуком и заявка на отличие от «новой школы» в чистом виде.',tracks:['PARTYNEXTDOOR'],spotify:'https://open.spotify.com/search/PARTYNEXTDOOR%20Slattcrank'},
+    {title:'ANOTHER ONE',year:2024,color:'linear-gradient(135deg,#0a1018 0%,#38bdf8 35%,#0a0c10 100%)',label:'VHQ Music',producer:'Slattcrank',chart:'EP',story:'Плотный мини-релиз 2024. Короткий хронометраж, агрессивная подача, стримовый формат.',tracks:['ANOTHER ONE'],spotify:'https://open.spotify.com/search/ANOTHER%20ONE%20Slattcrank'},
+    {title:'MADE IN HEAVEN',year:2024,color:'linear-gradient(135deg,#120a08 0%,#f59e0b 35%,#0a0604 100%)',label:'VHQ Music',producer:'Slattcrank',chart:'EP / синглы',story:'MEGAPOLIS, CHAOS CITY, MEDUZA — урбанистические образы и более собранный продакшн конца 2024.',tracks:['MEGAPOLIS','CHAOS CITY','MEDUZA'],spotify:'https://open.spotify.com/search/MADE%20IN%20HEAVEN%20Slattcrank'},
+    {title:'Live Letter',year:2025,color:'linear-gradient(135deg,#0a0c10 0%,#94a3b8 40%,#080a0c 100%)',label:'VHQ Music',producer:'Slattcrank',chart:'EP',story:'Февраль 2025. Короткий EP, «письмо» аудитории — переход к более зрелой подаче перед NO CONCEPT.',tracks:['Live Letter'],spotify:'https://open.spotify.com/search/Live%20Letter%20Slattcrank'},
+    {title:'NO CONCEPT',year:2025,color:'linear-gradient(135deg,#0c0810 0%,#e879f9 35%,#08060a 100%)',label:'VHQ Music',producer:'Slattcrank',chart:'EP · 5 треков',story:'Июнь 2025. Пять треков, ~10 минут. Минимализм в названии, максимальная плотность звука.',tracks:['NO CONCEPT'],spotify:'https://open.spotify.com/album/59sMtxXioev46YzYtvV1Ea'},
+    {title:'DRAMATIST',year:2026,color:'linear-gradient(135deg,#0a080c 0%,#fb7185 30%,#7c3aed 70%,#060408 100%)',label:'VHQ Music',producer:'Slattcrank + bounce / OLY / JEKIRA и др.',chart:'Альбом · Dramatist Era',story:'Октябрь 2026. Полноценный альбом эры Dramatist. Гости: Pepel Nahudi, Josodo, 6LOCKMYHEART. SHE\'S K#LLER, ROMEO, LE DEBUT.',tracks:['LE DEBUT','DRAMATIST','F#CK OFF','ROMEO','NECROPOLIS','SHE\'S K#LLER','THRILLER'],spotify:'https://open.spotify.com/search/DRAMATIST%20Slattcrank'}
+  ];
+
+  function initSlatt() {
+    const grid = document.getElementById('slattAlbumGrid');
+    if (!grid || grid.children.length) return;
+    slattAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Slattcrank', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'slatt');
+      grid.appendChild(card);
+    });
+  }
+
+
+
+  const lpAlbums = [
+    {title:'Hybrid Theory',year:2000,color:'linear-gradient(135deg,#0a0c10 0%,#38bdf8 35%,#1e293b 100%)',label:'Warner Bros.',producer:'Don Gilmore',chart:'Diamond US · ~27M',story:'Дебют, который взорвал 2000-е. Nu-metal + рэп Shinoda + скрим Chester. In the End, Crawling, One Step Closer — саундтрек поколения. Один из самых продаваемых рок-дебютов.',tracks:['Papercut','One Step Closer','Crawling','In the End','A Place for My Head','Points of Authority'],spotify:'https://open.spotify.com/search/Hybrid%20Theory%20Linkin%20Park'},
+    {title:'Meteora',year:2003,color:'linear-gradient(135deg:#1a1208 0%,#94a3b8 40%,#0a0806 100%)'.replace(':#',',#'),label:'Warner Bros.',producer:'Don Gilmore / LP',chart:'№1 Billboard · 8× Platinum',story:'Закрепление формулы и рост. Numb, Faint, Somewhere I Belong, Breaking the Habit. Короткий, плотный, без слабых мест.',tracks:['Somewhere I Belong','Faint','Numb','Breaking the Habit','From the Inside','Lying from You'],spotify:'https://open.spotify.com/search/Meteora%20Linkin%20Park'},
+    {title:'Minutes to Midnight',year:2007,color:'linear-gradient(135deg,#0c0a08 0%,#f59e0b 35%,#1c1008 100%)',label:'Warner Bros.',producer:'Rick Rubin / Mike Shinoda',chart:'№1 · уход от nu-metal',story:'Rick Rubin в продюсерах. Больше «чистого» рока и баллад. What I\'ve Done, Shadow of the Day, Given Up. Новая глава после Meteora.',tracks:['Given Up','What I\'ve Done','Shadow of the Day','Bleed It Out','Leave Out All the Rest'],spotify:'https://open.spotify.com/search/Minutes%20to%20Midnight%20Linkin%20Park'},
+    {title:'A Thousand Suns',year:2010,color:'linear-gradient(135deg,#0a0812 0%,#6366f1 40%,#08060c 100%)',label:'Warner Bros.',producer:'Rick Rubin / Mike Shinoda',chart:'Концепт · электроника',story:'Самый экспериментальный альбом. Политика, атомная тревога, электроника. The Catalyst, Waiting for the End, Iridescent.',tracks:['The Catalyst','Waiting for the End','Iridescent','Burning in the Skies','Radioactive'],spotify:'https://open.spotify.com/search/A%20Thousand%20Suns%20Linkin%20Park'},
+    {title:'Living Things',year:2012,color:'linear-gradient(135deg,#0a120e 0%,#22c55e 35%,#0a0c08 100%)',label:'Warner Bros.',producer:'Rick Rubin / Mike Shinoda',chart:'Синтез эпох',story:'Мост между электроникой A Thousand Suns и гитарами. BURN IT DOWN, CASTLE OF GLASS, LOST IN THE ECHO.',tracks:['BURN IT DOWN','CASTLE OF GLASS','LOST IN THE ECHO','POWERLESS','I\'LL BE GONE'],spotify:'https://open.spotify.com/search/Living%20Things%20Linkin%20Park'},
+    {title:'The Hunting Party',year:2014,color:'linear-gradient(135deg,#1a0a0a 0%,#ef4444 40%,#0c0606 100%)',label:'Warner Bros.',producer:'Brad Delson / Mike Shinoda',chart:'Возврат тяжести',story:'Ответ «мягкости» индустрии. Гости: Tom Morello, Rakim, Page Hamilton. Guilty All the Same, Until It Breaks, Final Masquerade.',tracks:['Guilty All the Same','Until It\'s Gone','Wastelands','Final Masquerade','Rebellion'],spotify:'https://open.spotify.com/search/The%20Hunting%20Party%20Linkin%20Park'},
+    {title:'One More Light',year:2017,color:'linear-gradient(135deg,#0c0a12 0%,#e879f9 35%,#08060a 100%)',label:'Warner Bros.',producer:'Brad Delson / Mike Shinoda',chart:'Поп-рок · последний с Chester',story:'Самый поп-ориентированный LP. Heavy, One More Light, Talking to Myself. Последний студийник с Chester Bennington.',tracks:['Heavy','One More Light','Talking to Myself','Battle Symphony','Good Goodbye'],spotify:'https://open.spotify.com/search/One%20More%20Light%20Linkin%20Park'},
+    {title:'From Zero',year:2024,color:'linear-gradient(135deg,#0a0c10 0%,#38bdf8 30%,#7c3aed 70%,#06080c 100%)',label:'Warner / Machine Shop',producer:'Linkin Park / Mike Shinoda',chart:'Новая эра · Emily Armstrong',story:'Возвращение после паузы. Emily Armstrong (Dead Sara) — вокал, Colin Brittain — барабаны. The Emptiness Machine, Heavy Is the Crown, Overflow — смесь классического LP и нового звука.',tracks:['The Emptiness Machine','Heavy Is the Crown','Overflow','Two Faced','Cut the Bridge','IGYEIH'],spotify:'https://open.spotify.com/search/From%20Zero%20Linkin%20Park'}
+  ];
+
+  function initLp() {
+    const grid = document.getElementById('lpAlbumGrid');
+    if (!grid || grid.children.length) return;
+    lpAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Linkin Park', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'lp');
+      grid.appendChild(card);
+    });
+  }
+
+
+  const madkidAlbums = [
+    {title:'мир, труд, май',year:2023,color:'linear-gradient(135deg,#1a0a12 0%,#e879f9 40%,#0a0608 100%)',label:'Independent',producer:'madk1d',chart:'Мини-альбом',story:'Ранний релиз «пацанского панка с района». Закрепил образ до большого взлёта.',tracks:['мир, труд, май'],spotify:'https://open.spotify.com/search/%D0%BC%D0%B8%D1%80%20%D1%82%D1%80%D1%83%D0%B4%20%D0%BC%D0%B0%D0%B9%20madk1d'},
+    {title:'Он сказал поехали!',year:2024,color:'linear-gradient(135deg,#0c0a10 0%,#a78bfa 40%,#08060c 100%)',label:'Independent',producer:'madk1d',chart:'Дебютный LP',story:'Январь 2024. Первый полноценный альбом. Переезд в Москву, студийная жизнь, рост аудитории.',tracks:['Он сказал поехали!'],spotify:'https://open.spotify.com/search/%D0%9E%D0%BD%20%D1%81%D0%BA%D0%B0%D0%B7%D0%B0%D0%BB%20%D0%BF%D0%BE%D0%B5%D1%85%D0%B0%D0%BB%D0%B8%20madk1d'},
+    {title:'Извините за внимание',year:2024,color:'linear-gradient(135deg,#0a1018 0%,#38bdf8 35%,#0a0c10 100%)',label:'Independent',producer:'madk1d',chart:'Альбом',story:'Второй релиз 2024. Продолжение линии «Он сказал поехали!» — плотный поток, узнаваемый вайб.',tracks:['Извините за внимание'],spotify:'https://open.spotify.com/search/%D0%98%D0%B7%D0%B2%D0%B8%D0%BD%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%20%D0%B2%D0%BD%D0%B8%D0%BC%D0%B0%D0%BD%D0%B8%D0%B5%20madk1d'},
+    {title:'sexyswag',year:2025,color:'linear-gradient(135deg,#120a14 0%,#e879f9 30%,#f472b6 70%,#0a0608 100%)',label:'Independent',producer:'madk1d',chart:'Лучший альбом 2025 · The Flow',story:'~16 минут. Сниппеты в TikTok решали, какие треки доживут до релиза. «так похуй», «ты че обиделась», «дырки в штанах» — вирус и чарты. VK Music: самый стремительный взлёт.',tracks:['так похуй','ты че обиделась','дырки в штанах'],spotify:'https://open.spotify.com/search/sexyswag%20madk1d'},
+    {title:'8 миля / Династия',year:2026,color:'linear-gradient(135deg,#0a0c10 0%,#fb7185 40%,#0a0808 100%)',label:'Collab · VILLIAN',producer:'madk1d / VILLIAN',chart:'Дуэт-хиты',story:'Связка с VILLIAN. «8 миля» и «Династия» — миллионы стримов, новый масштаб после sexyswag.',tracks:['8 миля','ДИНАСТИЯ'],spotify:'https://open.spotify.com/search/%D0%94%D0%98%D0%9D%D0%90%D0%A1%D0%A2%D0%98%D0%AF%20madk1d'}
+  ];
+
+  function initMadkid() {
+    const grid = document.getElementById('madkidAlbumGrid');
+    if (!grid || grid.children.length) return;
+    madkidAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('madk1d', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'madkid');
+      grid.appendChild(card);
+    });
+  }
+
+
+  const doraAlbums = [
+    {title:'Я не коммерция',year:2019,color:'linear-gradient(135deg,#1a0a12 0%,#f472b6 40%,#0a0608 100%)',label:'Rhymes Music',producer:'Дора',chart:'EP',story:'Дебютный мини-альбом. Старт под именем Дора после Mental Affection.',tracks:['Я не коммерция'],artistName:'Дора'},
+    {title:'Младшая сестра',year:2019,color:'linear-gradient(135deg,#0c0a10 0%,#fb7185 40%,#08060c 100%)',label:'Rhymes Music',producer:'Дора',chart:'Дебютный LP',story:'Гитары, подростковые тексты, самооценка. «Дорадура» выносит имя в «Вечерний Ургант».',tracks:['Дорадура','Младшая сестра','На скейте','Разлетаюсь'],artistName:'Дора'},
+    {title:'Боже, храни кьют-рок',year:2020,color:'linear-gradient(135deg,#120a08 0%,#f59e0b 35%,#0a0604 100%)',label:'Rhymes Music',producer:'Дора',chart:'Кьют-рок',story:'Второй альбом. Закрепляет «cute rock»-эстетику и гитарный поп.',tracks:['Боже, храни кьют-рок','Если хочешь','Не исправлюсь'],artistName:'Дора'},
+    {title:'Miss',year:2022,color:'linear-gradient(135deg,#0a0c12 0%,#a78bfa 40%,#080a10 100%)',label:'Rhymes Music',producer:'Дора',chart:'R&B / electro-pop',story:'Меньше чистых гитар, больше электроники и R&B. Loverboy, Я боюсь людей.',tracks:['Loverboy','Я боюсь людей'],artistName:'Дора'},
+    {title:'Lovesongs',year:2024,color:'linear-gradient(135deg,#120814 0%,#f472b6 30%,#e879f9 70%,#0a0608 100%)',label:'Rhymes Music',producer:'Дора',chart:'LP 2024',story:'Четвёртый студийник. Любовные темы, клипы «Зависима», «Лучше тебя».',tracks:['Зависима','Лучше тебя'],artistName:'Дора'}
+  ];
+
+  function initDora() {
+    const grid = document.getElementById('doraAlbumGrid');
+    if (!grid || grid.children.length) return;
+    doraAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('Дора', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'dora');
+      grid.appendChild(card);
+    });
+  }
+
+
+  const kristieeAlbums = [
+    {title:'Suka from Arizona',year:2024,color:'linear-gradient(135deg,#1a0a14 0%,#c084fc 40%,#0a060c 100%)',label:'Independent',producer:'KRISTIEE',chart:'EP',story:'Ранний EP после хайпа «Suka». Arizona-эстетика, cloud/trap, вход в сольную историю после 777.',tracks:['Suka','Arizona'],artistName:'KRISTIEE'},
+    {title:'РОМАНТИКА',year:2025,color:'linear-gradient(135deg,#0c0a12 0%,#f472b6 40%,#08060a 100%)',label:'KOALA / Independent',producer:'KRISTIEE',chart:'Альбом 2025',story:'Мелодичный релиз: романтик, Reverie, Dirty, я не собираюсь мешать — стримы и TikTok.',tracks:['романтик','Reverie','Dirty','я не собираюсь мешать'],artistName:'KRISTIEE'},
+    {title:'HANNA MANTANA',year:2026,color:'linear-gradient(135deg,#120a08 0%,#a78bfa 30%,#e879f9 70%,#0a0608 100%)',label:'KOALA MUSIC',producer:'KRISTIEE',chart:'LP · апрель 2026',story:'Дебютный «большой» альбом. Название — отсылка к Hannah Montana: смена подросткового образа. Cloud, фортепиано, влияние Пошлой Молли на заглавном треке.',tracks:['Hanna Mantana','1000','Все для тебя'],artistName:'KRISTIEE'}
+  ];
+
+  function initKristiee() {
+    const grid = document.getElementById('kristieeAlbumGrid');
+    if (!grid || grid.children.length) return;
+    kristieeAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a)}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div>${streamCardLinks('KRISTIEE', a.title, a)}</div>`;
+      card.onclick = () => openGenericAlbum(a, 'kristiee');
+      grid.appendChild(card);
+    });
+  }
+
+
+  function coverStyle(a) {
+    if (a.cover) return `background-image:url('${a.cover}');background-color:#111`;
+    return `background:${a.color}`;
+  }
+  function coverHTML(a) {
+    const titleOp = a.cover ? '0' : '1';
+    const cls = a.cover ? 'cover has-img' : 'cover';
+    return `<div class="${cls}" style="${coverStyle(a)}"><span class="cover-title" style="opacity:${titleOp}">${a.title}</span></div>`;
+  }
+
+  function yandexUrl(artist, album) {
+    return 'https://music.yandex.ru/search?text=' + encodeURIComponent('"' + album + '" ' + artist) + '&type=album';
+  }
+  function spotifyUrl(artist, album) {
+    return 'https://open.spotify.com/search/' + encodeURIComponent(album + ' ' + artist);
+  }
+  function appleUrl(artist, album) {
+    return 'https://music.apple.com/search?term=' + encodeURIComponent(album + ' ' + artist);
+  }
+  function streamCardLinks(artist, album, a) {
+    const yx = (a && a.yandex) || yandexUrl(artist, album);
+    const sp = (a && a.spotify) || spotifyUrl(artist, album);
+    const ap = (a && a.apple) || appleUrl(artist, album);
+    return `<div class="stream-card-links">` +
+      `<a class="yandex-card-link" href="${yx}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Яндекс</a>` +
+      `<a class="spotify-card-link" href="${sp}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>` +
+      `<a class="apple-card-link" href="${ap}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Apple</a>` +
+      `</div>`;
+  }
+  function streamOverlayLinks(artist, album, a) {
+    const yx = (a && a.yandex) || yandexUrl(artist, album);
+    const sp = (a && a.spotify) || spotifyUrl(artist, album);
+    const ap = (a && a.apple) || appleUrl(artist, album);
+    return `<div class="stream-row">` +
+      `<a class="yandex-link" href="${yx}" target="_blank" rel="noopener">▶ Яндекс Музыка</a>` +
+      `<a class="spotify-link" href="${sp}" target="_blank" rel="noopener">▶ Spotify</a>` +
+      `<a class="apple-link" href="${ap}" target="_blank" rel="noopener">▶ Apple Music</a>` +
+      `</div>`;
+  }
+  function openGenericAlbum(a, prefix) {
+    const title = document.getElementById(prefix + 'Title');
+    const year = document.getElementById(prefix + 'Year');
+    const meta = document.getElementById(prefix + 'Meta');
+    const story = document.getElementById(prefix + 'Story');
+    const tracks = document.getElementById(prefix + 'Tracks');
+    const overlay = document.getElementById(prefix + 'Overlay');
+    if (!overlay || !title) {
+      console.error('album overlay missing', prefix);
+      return;
+    }
+    const artistMap = {pepel:'Pepel Nahudi', kai:'Kai Angel', cupsize:'CUPSIZE', travis:'Travis Scott', slatt:'Slattcrank', lp:'Linkin Park', madkid:'madk1d', dora:'Дора', kristiee:'KRISTIEE'};
+    const artist = artistMap[prefix] || a.artistName || '';
+    title.textContent = a.title;
+    year.textContent = a.year;
+    const streamLink = streamOverlayLinks(artist, a.title, a);
+    meta.innerHTML = `<span>${a.label}</span><span>${a.producer}</span><span>${a.chart}</span>` + streamLink;
+    story.textContent = a.story;
+    tracks.innerHTML = a.tracks.map(t => `<li>${t}</li>`).join('');
+    if (overlay.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+    }
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function wireAlbumClose(prefix) {
+    const closeBtn = document.getElementById(prefix + 'Close');
+    const overlay = document.getElementById(prefix + 'Overlay');
+    if (closeBtn) closeBtn.onclick = () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      if (currentArtist) document.body.className = 'theme-' + currentArtist;
+    };
+    if (overlay) overlay.onclick = e => {
+      if (e.target.id === prefix + 'Overlay') closeBtn && closeBtn.click();
+    };
+  }
+  wireAlbumClose('pepel');
+  wireAlbumClose('kai');
+  wireAlbumClose('cupsize');
+  wireAlbumClose('travis');
+  wireAlbumClose('slatt');
+  wireAlbumClose('lp');
+  wireAlbumClose('madkid');
+  wireAlbumClose('dora');
+  wireAlbumClose('kristiee');
+
+  /* ===== NOIZE ===== */
+  const noizeAlbums = [
+    {id:'greatest',title:'The Greatest Hits Vol. 1',year:2008,theme:'theme-greatest',color:'linear-gradient(135deg,#2a1515 0%,#e63946 50%,#0f0a0a 100%)',label:'Мистерия звука',producer:'Noize MC и команда',chart:'Дебютный прорыв',story:'Дебютный альбом 17 июня 2008. Хиты «Из окна», «Выдыхай», «Моё море» до сих пор звучат на концертах.',tracks:['Из окна','Выдыхай','Моё море','Песня для радио','Кури бамбук']},
+    {id:'posledniy',title:'Последний альбом',year:2010,theme:'theme-posledniy',color:'linear-gradient(135deg,#10101a 0%,#457b9d 50%,#0a0a0f 100%)',label:'Монолит / Мистерия',producer:'Noize MC',chart:'Второй студийный',story:'Более зрелый и разнообразный материал. Усиление социальной составляющей.',tracks:['Последний альбом','Вены','Голос','Неон','Панелька']},
+    {id:'noviy',title:'Новый альбом',year:2012,theme:'theme-noviy',color:'linear-gradient(135deg,#101810 0%,#2a9d8f 50%,#0a0f0a 100%)',label:'Мистерия звука',producer:'Noize MC',chart:'30 марта 2012',story:'Альбом с говорящим названием. Клип на «Бассейн» вызвал большой резонанс.',tracks:['Бассейн','Новый альбом','Make Some Noize','Люди с автоматами','Грабли']},
+    {id:'protivo',title:'Protivo Gunz',year:2013,theme:'theme-protivo',color:'linear-gradient(135deg,#1a101a 0%,#9b5de5 50%,#0f0a0f 100%)',label:'Мистерия звука',producer:'Noize MC / Protivo Gunz',chart:'Альбом группы',story:'Возвращение к названию первоначальной группы. Более роковый коллективный звук.',tracks:['Protivo Gunz','Устрой дестрой','Чайлдфри','На Марсе классно']},
+    {id:'nerazber',title:'Неразбериха',year:2013,theme:'theme-nerazber',color:'linear-gradient(135deg,#1a1510 0%,#f4a261 50%,#0f0c08 100%)',label:'Мистерия звука',producer:'Noize MC',chart:'Октябрь 2013',story:'Экспериментальный материал периода поисков и перемен.',tracks:['Неразбериха','Жвачка','Порвав поводок']},
+    {id:'hard',title:'Hard Reboot',year:2014,theme:'theme-hard',color:'linear-gradient(135deg,#141414 0%,#00b4d8 50%,#0a0a0a 100%)',label:'Мистерия / Invisible',producer:'Noize MC',chart:'Сентябрь 2014',story:'Один из сильнейших. Коллабы с Верой Полозковой, Мариной Кацубой, Astronautalis.',tracks:['Hard Reboot','абв&эюя','М','Make Some Noize']},
+    {id:'tsar',title:'Царь горы',year:2016,theme:'theme-tsar',color:'linear-gradient(135deg,#1a1208 0%,#e9c46a 50%,#0f0a05 100%)',label:'Universal Music',producer:'Noize MC',chart:'Декабрь 2016',story:'Масштабный концептуальный релиз. Один из самых цельных альбомов.',tracks:['Царь горы','Вселенная бесконечна?','Кооператив «Лебединое озеро»']},
+    {id:'orphey',title:'Хипхопера: Орфей & Эвридика',year:2018,theme:'theme-orphey',color:'linear-gradient(135deg,#0f121a 0%,#7b68ee 50%,#080a0f 100%)',label:'Universal Music',producer:'Noize MC',chart:'Май 2018',story:'Современная интерпретация античного мифа в формате хипхоперы. Один из самых театральных релизов.',tracks:['Орфей','Эвридика','Спуск','Возвращение']},
+    {id:'vyhod',title:'Выход в город',year:2021,theme:'theme-vyhod',color:'linear-gradient(135deg,#121612 0%,#52b788 50%,#0a0c0a 100%)',label:'Universal / самиздат',producer:'Noize MC',chart:'Ноябрь–декабрь 2021',story:'Двухчастный альбом. Обложка Димы Ребуса. Один из последних крупных релизов до отъезда.',tracks:['Выход в город','Вояджер','Страна дождей','Живи без остатка']},
+    {id:'nedoma',title:'Не все дома',year:2025,theme:'theme-nedoma',color:'linear-gradient(135deg,#141010 0%,#ff6b6b 50%,#0a0808 100%)',label:'Self-released',producer:'Noize MC',chart:'Март 2025',story:'Первый полноценный альбом после признания иноагентом. Продолжение творчества в эмиграции.',tracks:['Не все дома','Светлая полоса','Планета Земля','Обломки чувств']}
+  ];
+
+  function initNoize() {
+    const grid = document.getElementById('noizeAlbumGrid');
+    if (!grid || grid.children.length) return;
+    noizeAlbums.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `${coverHTML(a).replace('opacity:0','opacity:1')}<div class="info"><h3>${a.title}</h3><div class="year">${a.year}</div></div>`;
+      card.onclick = () => openNoizeAlbum(a);
+      grid.appendChild(card);
+    });
+  }
+  function openNoizeAlbum(a) {
+    document.body.className = a.theme;
+    document.getElementById('noizeCover').style.background = a.color;
+    document.getElementById('noizeCover').textContent = a.title;
+    document.getElementById('noizeTitle').textContent = a.title;
+    document.getElementById('noizeYear').textContent = a.year;
+    document.getElementById('noizeMeta').innerHTML = `<span>${a.label}</span><span>${a.producer}</span><span>${a.chart}</span>`;
+    document.getElementById('noizeStory').textContent = a.story;
+    document.getElementById('noizeTracks').innerHTML = a.tracks.map(t => `<li>${t}</li>`).join('');
+    document.getElementById('noizeOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  document.getElementById('noizeClose').onclick = () => {
+    document.getElementById('noizeOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    if (currentArtist) document.body.className = 'theme-' + currentArtist;
+  };
+  document.getElementById('noizeOverlay').onclick = e => {
+    if (e.target.id === 'noizeOverlay') document.getElementById('noizeClose').click();
+  };
+
+  /* ===== YE ===== */
+  const yeData = [
+    {cls:'dropout',title:'The College Dropout',year:2004,hist:'Дебют. После аварии со сломанной челюстью. Soul-сэмплы, чипмунк-вокалы. Grammy за Best Rap Album.',tracks:['We Don’t Care','All Falls Down','Spaceship','Jesus Walks','Never Let Me Down','Through the Wire','Family Business','Last Call']},
+    {cls:'late',title:'Late Registration',year:2005,hist:'Работа с Jon Brion. Более оркестровый звук. «Gold Digger» — огромный хит. Снова Grammy и №1.',tracks:['Heard ’Em Say','Touch the Sky','Gold Digger','Drive Slow','Roses','Gone','Diamonds from Sierra Leone','We Major']},
+    {cls:'graduation',title:'Graduation',year:2007,hist:'Стадионный звук. Обложка Такаши Мураками. Конкуренция с 50 Cent. №1 + Grammy.',tracks:['Good Morning','Stronger','I Wonder','Good Life','Can’t Tell Me Nothing','Flashing Lights','Homecoming','Big Brother']},
+    {cls:'heartbreak',title:'808s & Heartbreak',year:2008,hist:'После смерти матери. Auto-Tune, холодные 808-е. Сильно повлиял на следующее поколение.',tracks:['Say You Will','Welcome to Heartbreak','Heartless','Amazing','Love Lockdown','Paranoid','RoboCop','Street Lights','Bad News','See You in My Nightmares','Coldest Winter']},
+    {cls:'fantasy',title:'My Beautiful Dark Twisted Fantasy',year:2010,hist:'Гавайи. Максималистский, оперный, тёмный. Обложка Джорджа Кондо. Многие считают вершиной.',tracks:['Dark Fantasy','Gorgeous','Power','All of the Lights','Monster','So Appalled','Devil in a New Dress','Runaway','Hell of a Life','Blame Game','Lost in the World']},
+    {cls:'yeezus',title:'Yeezus',year:2013,hist:'Индустриальный минимализм. Rick Rubin, Daft Punk, Arca. Красный диск в прозрачном кейсе.',tracks:['On Sight','Black Skinhead','I Am a God','New Slaves','Hold My Liquor','I’m In It','Blood on the Leaves','Guilt Trip','Send It Up','Bound 2']},
+    {cls:'pablo',title:'The Life of Pablo',year:2016,hist:'«Живой» альбом — обновлялся после релиза. Презентация в MSG вместе с Yeezy Season 3.',tracks:['Ultralight Beam','Father Stretch My Hands Pt. 1','Famous','Feedback','Waves','FML','Real Friends','Wolves','No More Parties in LA','Fade','Saint Pablo']},
+    {cls:'ye',title:'ye',year:2018,hist:'Вайоминг. 7 треков, 23 минуты. Альбом назван в честь нового имени. Минимализм и откровенность.',tracks:['I Thought About Killing You','Yikes','All Mine','Wouldn’t Leave','No Mistakes','Ghost Town','Violent Crimes']},
+    {cls:'jesus',title:'Jesus Is King',year:2019,hist:'Госпел-альбом. Полный уход в христианскую тематику. Sunday Service.',tracks:['Every Hour','Selah','Follow God','Closed on Sunday','On God','Everything We Need','Water','God Is','Hands On','Use This Gospel','Jesus Is Lord']},
+    {cls:'donda',title:'Donda',year:2021,hist:'Посвящён матери. Несколько listening-party на стадионах. Один из самых масштабных релизов.',tracks:['Jail','God Breathed','Off the Grid','Hurricane','Praise God','Jonah','Moon','Heaven and Hell','Jesus Lord','Come to Life','No Child Left Behind']},
+    {cls:'bully',title:'Bully',year:2026,hist:'Двенадцатый студийный. Вышел 28 марта 2026 через YZY и Gamma. Гости: Travis Scott, CeeLo Green, Peso Pluma, Don Toliver и др. Deluxe — июнь 2026.',tracks:['King','This A Must','Father (feat. Travis Scott)','All The Love','Punch Drunk','Whatever Works','Mama’s Favorite','Sisters And Brothers','Bully (feat. CeeLo Green)','Highs And Lows','I Can’t Wait','White Lines','Circles (feat. Don Toliver)','Preacher Man','Beauty And The Beast','Damn','Last Breath (feat. Peso Pluma)','This One Here']}
+  ];
+
+  function initYe() {
+    const cont = document.getElementById('yeAlbums');
+    if (!cont || cont.children.length) return;
+    yeData.forEach(a => {
+      const art = document.createElement('article');
+      art.className = `ye-album ${a.cls}`;
+      art.onclick = function () { this.classList.toggle('open'); };
+      art.innerHTML = `
+        <div class="album-header">
+          <div class="album-title">${a.title}</div>
+          <div class="album-year">${a.year}</div>
+          <span class="album-toggle">▼ подробнее</span>
+        </div>
+        <div class="album-body">
+          <div class="album-history"><p>${a.hist}</p></div>
+          <div class="tracklist"><strong>Треки:</strong><ol>${a.tracks.map(t => `<li>${t}</li>`).join('')}</ol></div>
+        </div>`;
+      cont.appendChild(art);
+    });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.ye-album').forEach(el => obs.observe(el));
+  }
+
+  /* ===== PRODIGY ===== */
+  const prodigyData = [
+    {cls:'exp',title:'Experience',year:1992,hist:'Записан в основном Лиамом в Earthbound и Strongroom. Один из первых полноценных LP рэйв-сцены. Моби позже говорил, что Experience изменил его представление об электронном альбоме.',tracks:['Jericho','Music Reach (1/2/3/4)','Wind It Up','Your Love (Remix)','Hyperspeed','Charly (Trip Into Drum And Bass Version)','Out of Space','Everybody in the Place','Weather Experience','Fire (Sunrise Version)','Ruff in the Jungle Bizness','Death of the Prodigy Dancers (Live)']},
+    {cls:'jilted',title:'Music for the Jilted Generation',year:1994,hist:'Реакция на Criminal Justice Act. Более тёмный breakbeat и techno. Обложка — металлическая кричащая голова. №1 в UK.',tracks:['Intro','Break & Enter','Their Law','Full Throttle','Voodoo People','Speedway','The Heat (The Energy)','Poison','No Good (Start the Dance)','One Love','The Narcotic Suite: 3 Kilos','Skylined','Claustrophobic Sting']},
+    {cls:'fat',title:'The Fat of the Land',year:1997,hist:'Пик. Впервые полноценные вокалы Кита. «Firestarter» и «Breathe» — мировые хиты. №1 в 16 странах, >10 млн копий.',tracks:['Smack My Bitch Up','Breathe','Diesel Power','Funky Shit','Serial Thrilla','Mindfields','Narayan','Firestarter','Climbatize','Fuel My Fire']},
+    {cls:'always',title:'Always Outnumbered, Never Outgunned',year:2004,hist:'Первый без Кита как постоянного участника. Гостевые вокалы: Liam Gallagher, Juliette Lewis, Twista и др.',tracks:['Spitfire','Girls','Memphis Bells','Get Up Get Off','Hotride','Wake Up Call','Action Radar','Medusa’s Path','Phoenix','You’ll Be Under My Wheels','The Way It Is','Shoot Down']},
+    {cls:'invaders',title:'Invaders Must Die',year:2009,hist:'Возвращение к ярости. Хоулетт, Максим и Кит снова вместе. №1 в UK. Один из самых мощных туров.',tracks:['Invaders Must Die','Omen','Thunder','Colours','Take Me to the Hospital','Warrior’s Dance','Run With the Wolves','Omen Reprise','World’s on Fire','Piranha','Stand Up']},
+    {cls:'day',title:'The Day Is My Enemy',year:2015,hist:'Обложка — лиса среди руин (Nick McFarlane). 166 вариантов. Впервые нет логотипа и названия. Снова №1.',tracks:['The Day Is My Enemy','Nasty','Rebel Radio','Ibiza','Destroy','Wild Frontier','Rok-Weiler','Beyond the Deathray','Rhythm Bomb','Roadblox','Get Your Fight On','Medicine','Invisible Sun','Wall of Death']},
+    {cls:'tourists',title:'No Tourists',year:2018,hist:'Последний альбом при жизни Кита. Жёсткий, почти панк-электронный. «Без туристов» — только для своих. Седьмой подряд №1 в UK.',tracks:['Need Some1','Light Up the Sky','We Live Forever','No Tourists','Fight Fire with Fire','Timebomb Zone','Champions of London','Boom Boom Tap','Resonate','Give Me a Signal']}
+  ];
+
+  function initProdigy() {
+    const cont = document.getElementById('prodigyAlbums');
+    if (!cont || cont.children.length) return;
+    prodigyData.forEach(a => {
+      const art = document.createElement('article');
+      art.className = `prodigy-album ${a.cls}`;
+      art.onclick = function () { this.classList.toggle('open'); };
+      art.innerHTML = `
+        <div class="album-header">
+          <div class="album-title">${a.title}</div>
+          <div class="album-year">${a.year}</div>
+          <span class="album-toggle">▼ подробнее</span>
+        </div>
+        <div class="album-body">
+          <div class="album-history"><p>${a.hist}</p></div>
+          <div class="tracklist"><strong>Трек-лист:</strong><ol>${a.tracks.map(t => `<li>${t}</li>`).join('')}</ol></div>
+        </div>`;
+      cont.appendChild(art);
+    });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.prodigy-album').forEach(el => obs.observe(el));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeOverlays();
+      if (currentArtist) document.body.className = 'theme-' + currentArtist;
+    }
+  });
+})();
+</script>
+</body>
+</html>
